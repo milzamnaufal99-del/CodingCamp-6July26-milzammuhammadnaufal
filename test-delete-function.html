@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Function Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        button { margin: 5px; padding: 8px 12px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>handleDeleteClick Function Test</h1>
+    <p>Total Spent: <span id="balance-display">$0.00</span></p>
+    
+    <div class="test-section">
+        <h2>Current Transactions</h2>
+        <div id="transactions-display"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Actions</h2>
+        <button onclick="addTestTransactions()">Add Test Transactions</button>
+        <button onclick="testDelete()">Test Delete Function</button>
+        <button onclick="clearAll()">Clear All</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // Simplified version of the app for testing handleDeleteClick
+        (function () {
+            const STORAGE_KEY = 'expense_visualizer_transactions_test_delete';
+            let transactions = [];
+
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            function saveTransactions() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+                } catch (e) {
+                    console.error('Failed to save transactions:', e);
+                }
+            }
+
+            function loadTransactions() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    return raw ? JSON.parse(raw) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function renderBalance() {
+                const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+                document.getElementById('balance-display').textContent = currencyFormatter.format(total);
+            }
+
+            function renderTransactions() {
+                const container = document.getElementById('transactions-display');
+                if (transactions.length === 0) {
+                    container.innerHTML = '<p>No transactions</p>';
+                } else {
+                    container.innerHTML = transactions.map(t => 
+                        `<div>ID: ${t.id.slice(0,8)}..., Name: ${t.name}, Amount: ${currencyFormatter.format(t.amount)}, Category: ${t.category} 
+                         <button onclick="testDeleteSpecific('${t.id}')">Delete This</button></div>`
+                    ).join('');
+                }
+            }
+
+            function renderAll() {
+                renderBalance();
+                renderTransactions();
+            }
+
+            // THIS IS THE FUNCTION WE'RE TESTING - exact copy from main app.js
+            function handleDeleteClick(id) {
+                // Filter out the transaction with the matching ID
+                transactions = transactions.filter(transaction => transaction.id !== id);
+                
+                // Save the updated transactions to localStorage
+                saveTransactions();
+                
+                // Update all UI components synchronously
+                renderAll();
+            }
+
+            // Test helper functions
+            window.addTestTransactions = function() {
+                const testTransactions = [
+                    { id: 'test-1', name: 'Coffee', amount: 4.50, category: 'Food' },
+                    { id: 'test-2', name: 'Bus Ticket', amount: 2.25, category: 'Transport' },
+                    { id: 'test-3', name: 'Movie', amount: 15.00, category: 'Fun' }
+                ];
+                
+                transactions.push(...testTransactions);
+                saveTransactions();
+                renderAll();
+                logResult('✓ Added 3 test transactions', 'success');
+            }
+
+            window.testDelete = function() {
+                if (transactions.length === 0) {
+                    logResult('✗ No transactions to delete. Add some first!', 'error');
+                    return;
+                }
+
+                const initialCount = transactions.length;
+                const totalBefore = transactions.reduce((sum, t) => sum + t.amount, 0);
+                const transactionToDelete = transactions[0];
+                const idToDelete = transactionToDelete.id;
+                
+                logResult(`Testing deletion of transaction: ${transactionToDelete.name} (${currencyFormatter.format(transactionToDelete.amount)})`, '');
+                
+                // Test the function
+                const startTime = performance.now();
+                handleDeleteClick(idToDelete);
+                const endTime = performance.now();
+                
+                // Verify results
+                const finalCount = transactions.length;
+                const totalAfter = transactions.reduce((sum, t) => sum + t.amount, 0);
+                const deletedExists = transactions.some(t => t.id === idToDelete);
+                
+                // Check if it executed within 100ms (synchronous requirement)
+                const executionTime = endTime - startTime;
+                
+                if (finalCount === initialCount - 1 && !deletedExists) {
+                    logResult(`✓ Transaction successfully deleted in ${executionTime.toFixed(2)}ms`, 'success');
+                    logResult(`✓ Count: ${initialCount} → ${finalCount}`, 'success');
+                    logResult(`✓ Total: ${currencyFormatter.format(totalBefore)} → ${currencyFormatter.format(totalAfter)}`, 'success');
+                    
+                    // Verify localStorage persistence
+                    const savedTransactions = loadTransactions();
+                    if (savedTransactions.length === finalCount && !savedTransactions.some(t => t.id === idToDelete)) {
+                        logResult('✓ Changes persisted to localStorage', 'success');
+                    } else {
+                        logResult('✗ Failed to persist changes to localStorage', 'error');
+                    }
+                    
+                    if (executionTime < 100) {
+                        logResult('✓ Meets 100ms performance requirement', 'success');
+                    } else {
+                        logResult(`⚠ Execution took ${executionTime.toFixed(2)}ms (requirement: < 100ms)`, 'error');
+                    }
+                } else {
+                    logResult('✗ Delete operation failed', 'error');
+                }
+            }
+
+            window.testDeleteSpecific = function(id) {
+                const transaction = transactions.find(t => t.id === id);
+                if (!transaction) {
+                    logResult('✗ Transaction not found', 'error');
+                    return;
+                }
+                
+                logResult(`Deleting specific transaction: ${transaction.name}`, '');
+                handleDeleteClick(id);
+                logResult('✓ Specific delete completed', 'success');
+            }
+
+            window.clearAll = function() {
+                transactions = [];
+                saveTransactions();
+                renderAll();
+                document.getElementById('test-results').innerHTML = '';
+                logResult('✓ Cleared all transactions and test results', 'success');
+            }
+
+            function logResult(message, type) {
+                const results = document.getElementById('test-results');
+                const div = document.createElement('div');
+                div.className = type;
+                div.textContent = message;
+                results.appendChild(div);
+            }
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function () {
+                transactions = loadTransactions();
+                renderAll();
+                logResult('Test environment initialized', '');
+            });
+        })();
+    </script>
+</body>
+</html>

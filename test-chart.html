@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chart Implementation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Testing renderChart() Implementation</h1>
+    
+    <div id="chart-section">
+        <h2>Spending by Category</h2>
+        <p id="chart-empty-msg">No spending data available.</p>
+        <canvas id="expense-chart"></canvas>
+    </div>
+
+    <script>
+        // Minimal test of the renderChart logic
+        const CATEGORIES = ['Food', 'Transport', 'Fun'];
+        let chartInstance = null;
+        
+        // Test transactions data
+        const testTransactions = [
+            { id: '1', name: 'Coffee', amount: 4.50, category: 'Food' },
+            { id: '2', name: 'Bus fare', amount: 2.75, category: 'Transport' },
+            { id: '3', name: 'Movie ticket', amount: 12.00, category: 'Fun' },
+            { id: '4', name: 'Lunch', amount: 8.25, category: 'Food' }
+        ];
+
+        // Currency formatter
+        const currencyFormatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        function renderChart(transactions) {
+            const chartCanvas = document.getElementById('expense-chart');
+            const emptyMessage = document.getElementById('chart-empty-msg');
+            
+            if (!chartCanvas || !emptyMessage) return;
+
+            // Compute categoryTotals by summing amounts per category from transactions
+            const categoryTotals = CATEGORIES.reduce((acc, category) => {
+                acc[category] = transactions
+                    .filter(t => t.category === category)
+                    .reduce((sum, t) => sum + t.amount, 0);
+                return acc;
+            }, {});
+
+            // Filter to only categories with total > 0 for data labels and values
+            const categoriesWithData = CATEGORIES.filter(category => categoryTotals[category] > 0);
+            const dataValues = categoriesWithData.map(category => categoryTotals[category]);
+            
+            // When no categories have total > 0: hide canvas and show message
+            if (categoriesWithData.length === 0) {
+                chartCanvas.style.display = 'none';
+                emptyMessage.style.display = 'block';
+                return;
+            }
+
+            // When data exists: show canvas and hide message
+            chartCanvas.style.display = 'block';
+            emptyMessage.style.display = 'none';
+
+            // Destroy existing chart instance if it exists
+            if (chartInstance !== null) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+
+            try {
+                // Check if Chart.js is available (CDN loaded successfully)
+                if (typeof Chart === 'undefined') {
+                    throw new Error('Chart.js not loaded');
+                }
+
+                // Calculate total for percentage computation
+                const total = dataValues.reduce((sum, value) => sum + value, 0);
+
+                // Create new Chart instance of type 'pie' with label and percentage options
+                chartInstance = new Chart(chartCanvas, {
+                    type: 'pie',
+                    data: {
+                        labels: categoriesWithData,
+                        datasets: [{
+                            data: dataValues,
+                            backgroundColor: [
+                                '#ff6384', // Red/Pink for Food
+                                '#36a2eb', // Blue for Transport  
+                                '#ffce56'  // Yellow for Fun
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return `${label}: ${currencyFormatter.format(value)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                console.log('Chart created successfully');
+                console.log('Category totals:', categoryTotals);
+                console.log('Categories with data:', categoriesWithData);
+                console.log('Data values:', dataValues);
+            } catch (error) {
+                // If Chart is undefined (CDN failure), display error message instead
+                chartCanvas.style.display = 'none';
+                emptyMessage.style.display = 'block';
+                emptyMessage.textContent = 'Unable to load chart. Please check your internet connection.';
+                console.error('Chart creation failed:', error);
+            }
+        }
+
+        // Test with sample data
+        window.addEventListener('load', function() {
+            console.log('Testing with sample transactions:', testTransactions);
+            renderChart(testTransactions);
+        });
+
+        // Test with empty data after 3 seconds
+        setTimeout(function() {
+            console.log('Testing with empty transactions');
+            renderChart([]);
+        }, 3000);
+    </script>
+</body>
+</html>

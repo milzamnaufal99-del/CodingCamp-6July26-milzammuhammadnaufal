@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Test</title>
+    <style>
+        .error-msg { color: red; font-size: 14px; margin-top: 4px; display: block; }
+        .form-group { margin-bottom: 15px; }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+        input, select { padding: 8px; width: 200px; }
+        label { display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Form Submission Test</h1>
+    <p>Total Spent: <span id="balance-display">$0.00</span></p>
+    
+    <form id="expense-form" novalidate>
+        <div class="form-group">
+            <label for="item-name">Item Name</label>
+            <input type="text" id="item-name" name="item-name" maxlength="100" placeholder="e.g. Coffee" />
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" min="0.01" max="9999999.99" step="0.01" placeholder="0.00" />
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+                <option value="" disabled selected>Select a category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Fun">Fun</option>
+            </select>
+        </div>
+
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <div id="test-results">
+        <h2>Test Results</h2>
+        <p id="transaction-count">Transactions: 0</p>
+        <div id="transactions-list"></div>
+    </div>
+
+    <script>
+        // Inline test version of the app logic
+        (function () {
+            const STORAGE_KEY = 'expense_visualizer_transactions_test';
+            const CATEGORIES = ['Food', 'Transport', 'Fun'];
+            let transactions = [];
+
+            // Currency formatter
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // Validation function
+            function validateForm(name, amount, category) {
+                var errors = {};
+                var valid = true;
+
+                if (!name || typeof name !== 'string' || name.trim() === '') {
+                    errors.name = 'Item name is required and cannot be empty.';
+                    valid = false;
+                }
+
+                var numericAmount = parseFloat(amount);
+                if (isNaN(numericAmount) || numericAmount <= 0 || numericAmount > 9999999.99) {
+                    errors.amount = 'Amount must be between $0.01 and $9,999,999.99.';
+                    valid = false;
+                }
+
+                if (!category || !CATEGORIES.includes(category)) {
+                    errors.category = 'Please select a valid category.';
+                    valid = false;
+                }
+
+                return { valid: valid, errors: errors };
+            }
+
+            // Save to localStorage
+            function saveTransactions() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+                } catch (e) {
+                    console.error('Failed to save transactions:', e);
+                }
+            }
+
+            // Render balance
+            function renderBalance() {
+                const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+                const balanceElement = document.getElementById('balance-display');
+                if (balanceElement) {
+                    balanceElement.textContent = currencyFormatter.format(total);
+                }
+            }
+
+            // Update test results
+            function renderTestResults() {
+                const countElement = document.getElementById('transaction-count');
+                const listElement = document.getElementById('transactions-list');
+                
+                countElement.textContent = `Transactions: ${transactions.length}`;
+                
+                listElement.innerHTML = transactions.map(t => 
+                    `<p>ID: ${t.id}, Name: ${t.name}, Amount: ${currencyFormatter.format(t.amount)}, Category: ${t.category}</p>`
+                ).join('');
+            }
+
+            function renderAll() {
+                renderBalance();
+                renderTestResults();
+            }
+
+            // Clear error messages
+            function clearErrorMessages() {
+                const errorMessages = document.querySelectorAll('.error-msg');
+                errorMessages.forEach(msg => msg.remove());
+            }
+
+            // Show field error
+            function showFieldError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                if (!field) return;
+
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'error-msg';
+                errorSpan.textContent = message;
+                errorSpan.style.cssText = 'color: red; font-size: 14px; margin-top: 4px; display: block;';
+
+                field.parentNode.insertBefore(errorSpan, field.nextSibling);
+            }
+
+            // Form submit handler - This is the function we're testing
+            function handleFormSubmit(event) {
+                event.preventDefault();
+
+                clearErrorMessages();
+
+                const nameInput = document.getElementById('item-name');
+                const amountInput = document.getElementById('amount');
+                const categorySelect = document.getElementById('category');
+
+                const name = nameInput.value.trim();
+                const amount = amountInput.value;
+                const category = categorySelect.value;
+
+                const validation = validateForm(name, amount, category);
+
+                if (!validation.valid) {
+                    if (validation.errors.name) {
+                        showFieldError('item-name', validation.errors.name);
+                    }
+                    if (validation.errors.amount) {
+                        showFieldError('amount', validation.errors.amount);
+                    }
+                    if (validation.errors.category) {
+                        showFieldError('category', validation.errors.category);
+                    }
+                    return;
+                }
+
+                let id;
+                try {
+                    id = crypto.randomUUID();
+                } catch (e) {
+                    id = Date.now().toString() + Math.random().toString(36).slice(2);
+                }
+
+                const newTransaction = {
+                    id: id,
+                    name: name,
+                    amount: parseFloat(amount),
+                    category: category
+                };
+
+                transactions.push(newTransaction);
+                saveTransactions();
+                renderAll();
+
+                // Reset form
+                nameInput.value = '';
+                amountInput.value = '';
+                categorySelect.selectedIndex = 0;
+
+                console.log('Transaction added:', newTransaction);
+            }
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function () {
+                renderAll();
+                
+                const form = document.getElementById('expense-form');
+                if (form) {
+                    form.addEventListener('submit', handleFormSubmit);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
+</text>
+</invoke>

@@ -1,0 +1,310 @@
+/* css/style.css — Expense Budget Visualizer Styles */
+
+/* ===== BASE RESET ===== */
+
+/* Apply box-sizing: border-box globally */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== TYPOGRAPHY ===== */
+
+/* Consistent font family and line height globally */
+html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+body {
+  font-size: 16px;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+/* ===== LAYOUT ===== */
+
+/* Vertical flexbox layout on main */
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header styling */
+header {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: 1rem auto;
+  max-width: 1200px;
+}
+
+/* Section layout - sections stack vertically in order: Balance_Display → Input_Form → Chart → Transaction_List */
+section {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure proper stacking order */
+#input-section {
+  order: 1;
+}
+
+#chart-section {
+  order: 2;
+}
+
+#list-section {
+  order: 3;
+}
+
+
+/* ===== TASK 10.2: RESPONSIVE SIZING, SCROLLABLE LIST, EMPTY/ERROR STATES ===== */
+
+/* --- Fluid widths & overflow safety net --- */
+
+/* Prevent any content from causing horizontal scroll */
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Constrain the main container to a readable max-width and center it */
+main {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header mirrors main container width */
+header {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* All sections fill their container width without overflowing */
+section {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Inputs, selects, buttons should never exceed their container */
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+/* --- Form layout --- */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+#expense-form button[type="submit"] {
+  padding: 0.6rem 1.25rem;
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+#expense-form button[type="submit"]:hover {
+  background-color: #0b5ed7;
+}
+
+/* --- Transaction list: scrollable container --- */
+
+/* The inner div that holds transaction rows scrolls, not the section */
+#transaction-list {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Transaction rows */
+.transaction-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e9ecef;
+  flex-wrap: wrap; /* allow wrapping on very narrow viewports */
+}
+
+.transaction-row:last-child {
+  border-bottom: none;
+}
+
+.transaction-name {
+  flex: 1 1 auto;
+  font-weight: 500;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.transaction-amount {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.transaction-category {
+  flex: 0 0 auto;
+  font-size: 0.85em;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.delete-btn {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.6rem;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.delete-btn:hover {
+  background-color: #bb2d3b;
+}
+
+/* --- Empty state messages --- */
+
+#list-empty-msg,
+#chart-empty-msg,
+.empty-state {
+  color: #aaa;
+  text-align: center;
+  font-style: italic;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+/* --- Validation error messages --- */
+
+/* These appear as <span class="error-msg"> injected by JS beneath each invalid field */
+.error-msg {
+  display: block;
+  color: #dc3545;
+  font-size: 0.85em;
+  margin-top: 4px;
+}
+
+/* --- Error / warning banners --- */
+
+/* #app-banner is injected by JS with inline styles; these rules act as
+   a semantic fallback and ensure class-based banners also work */
+#app-banner,
+.error-banner,
+.warning-banner {
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  text-align: center;
+  border-radius: 0;     /* full-width banner: no radius */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error-banner {
+  background-color: #fdecea;
+  color: #b91c1c;
+  border-bottom: 1px solid #f87171;
+}
+
+.warning-banner {
+  background-color: #fef9c3;
+  color: #854d0e;
+  border-bottom: 1px solid #fde047;
+}
+
+/* --- Canvas: hidden by default to prevent flash before JS runs --- */
+
+/* renderChart() sets display:block when data exists, or keeps it hidden.
+   This prevents the empty canvas from showing before DOMContentLoaded fires. */
+#expense-chart {
+  display: none;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* --- Responsive: single breakpoint at 768px --- */
+
+@media (min-width: 768px) {
+  /* Widen the main container slightly on larger screens */
+  main {
+    max-width: 900px;
+    padding: 1.5rem;
+  }
+
+  header {
+    max-width: 900px;
+    padding: 2rem;
+  }
+
+  /* Requirement 6.1: sections MUST remain in vertical order at all viewport widths.
+     Balance_Display → Input_Form → Chart → Transaction_List.
+     A side-by-side grid would place form and chart at the same vertical level,
+     violating Req 6.1, so we keep the flex column on all screen sizes. */
+
+  /* Submit button doesn't need to be full-width on wider screens */
+  #expense-form button[type="submit"] {
+    width: auto;
+    min-width: 140px;
+  }
+}
