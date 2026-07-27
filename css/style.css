@@ -448,3 +448,21 @@ transition:.3s;
   font-weight: bold;
   color: #111827;
 }
+
+ .form-actions{
+        display:flex;
+        gap:15px;
+        margin-top:20px;
+      }
+
+      .form-actions button{
+        flex:1;
+      }
+
+      #reset-data{
+        background:#ef4444;
+      }
+
+      #reset-data:hover{
+        background:#dc2626;
+      }

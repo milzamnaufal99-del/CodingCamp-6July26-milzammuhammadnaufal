@@ -144,20 +144,26 @@
             placeholder="Optional..."
             ></textarea>
           </div>
-          <button type="submit">
+          
+          <div class="form-actions">
+            <button type="submit">
 
-            Save Transaction
+              Save Transaction
 
-          </button>
+            </button>
 
-      <!-- Chart -->
-      <section id="chart-section">
-        <h2>Spending by Category</h2>
-        <p id="chart-empty-msg">No spending data available.</p>
-        <canvas id="expense-chart"></canvas>
-      </section>
+            <button
+            type="button"
+            id="reset-data"
+            >
 
-      <!-- Transaction_List -->
+            Reset All Data
+
+            </button>
+
+          </div>
+
+           <!-- Transaction_List -->
       <section id="list-section">
         <h2>Transactions</h2>
         <div id="transaction-list">
@@ -169,3 +175,11 @@
 
   </body>
 </html>
+
+      <!-- Chart -->
+      <section id="chart-section">
+        <h2>Spending by Category</h2>
+        <p id="chart-empty-msg">No spending data available.</p>
+        <canvas id="expense-chart"></canvas>
+      </section>
+
