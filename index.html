@@ -15,13 +15,45 @@
   <body>
 
     <!-- Balance_Display -->
-    <header>
+    <header class="header">
+      <div class= "header-content">
       <h1>Expense Budget Visualizer</h1>
-      <p>Total Spent: <span id="balance-display">$0.00</span></p>
+      <p>Track your income, expenses, and savings in one place.</p>
+      </div>
     </header>
 
     <main>
+      <!-- Dashboard Summary -->
+       <section id="Summary-section">
 
+        <h2>Dashboard Overview</h2>
+
+        <div class="Summary-container">
+
+        <div class="Summary-card">
+          <h3>Total Balance</h3>
+          <p id="total-balance">Rp 0</p>
+        </div>
+        
+        <div class="Summary-card">
+          <h3>Total Income</h3>
+          <p id="total-income">Rp 0</p>
+        </div>
+
+        <div class="Summary-card">
+          <h3>Total Expense</h3>
+          <p id="total-expense">Rp 0</p>
+        </div>
+
+        <div class="Summary-card">
+          <h3>Total Savings</h3>
+          <p id="total-savings">Rp 0</p>
+        </div>
+
+        </div>
+
+       </section>
+       
       <!-- Input_Form -->
       <section id="input-section">
         <h2>Add Expense</h2>

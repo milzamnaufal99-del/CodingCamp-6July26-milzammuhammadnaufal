@@ -1,3 +1,75 @@
+/* ==========================
+   Header
+========================== */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f7fb;
+  color: #1f2937;
+}
+
+.header {
+  background: #2563eb;
+  color: white;
+  padding: 40px 20px;
+}
+
+.header-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header p {
+  margin-top: 10px;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* ==========================
+   Dashboard Summary
+========================== */
+
+#summary-section {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+#summary-section h2 {
+  margin-bottom: 20px;
+}
+
+.summary-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 08);
+}
+
+.summary-card h3 {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.summary-card p {
+  margin-top: 12px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #111827;
+}
+
 /* css/style.css — Expense Budget Visualizer Styles */
 
 /* ===== BASE RESET ===== */
