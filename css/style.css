@@ -167,8 +167,12 @@ section {
 
 /* Prevent any content from causing horizontal scroll */
 body {
+  margin: 0;
   overflow-x: hidden;
   width: 100%;
+  font-family: "Poppins", sans-serif;
+  background: #f5f7fb;
+  color: #1f2937;
 }
 
 /* Constrain the main container to a readable max-width and center it */
@@ -180,9 +184,29 @@ main {
 }
 
 /* Header mirrors main container width */
-header {
-  width: 100%;
-  max-width: 800px;
+/* ==========================
+   Header
+========================== */
+
+.header {
+  background: #2563eb;
+  color: white;
+  padding: 40px 20px;
+}
+
+.header-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.header p {
+  margin-top: 12px;
+  opacity: .9;
 }
 
 /* All sections fill their container width without overflowing */
@@ -208,17 +232,26 @@ button {
 }
 
 .form-group label {
-  margin-bottom: 0.25rem;
-  font-weight: 500;
+  font-weight: 600;
+   margin-bottom: 8px;
 }
 
 .form-group input,
-.form-group select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
-  width: 100%;
+.form-group select,
+.form-group textarea{
+
+padding:12px 15px;
+
+font-size:1rem;
+
+border:1px solid #d1d5db;
+
+border-radius:10px;
+
+outline:none;
+
+transition:.3s;
+
 }
 
 #expense-form button[type="submit"] {
@@ -360,9 +393,11 @@ button {
 @media (min-width: 768px) {
   /* Widen the main container slightly on larger screens */
   main {
-    max-width: 900px;
-    padding: 1.5rem;
-  }
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
 
   header {
     max-width: 900px;
@@ -379,4 +414,37 @@ button {
     width: auto;
     min-width: 140px;
   }
+}
+
+/* ==========================
+   Dashboard Summary
+========================== */
+#summary-section{
+    margin-bottom:40px;
+}
+
+.summary-container{
+  display:grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+}
+
+.summary-card{
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 08);
+}
+
+.summary-card h3{
+  margin: 0;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.summary-card p{
+  margin-top: 12px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #111827;
 }
