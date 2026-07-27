@@ -46,28 +46,32 @@ body {
 
 .summary-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
 .summary-card {
   background: white;
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 08);
+  transition:.3s;
 }
 
-.summary-card h3 {
-  margin: 0;
-  color: #6b7280;
-  font-size: 1rem;
+.summary-card:hover{
+  transform: translate(-5px);
 }
 
-.summary-card p {
-  margin-top: 12px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #111827;
+.Summary-card h3{
+    font-size:15px;
+    color:#666;
+    margin-bottom:10px;
+}
+
+.Summary-card p{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563eb;
 }
 
 /* css/style.css — Expense Budget Visualizer Styles */
@@ -388,6 +392,22 @@ transition:.3s;
   max-width: 100%;
 }
 
+/* ==========================
+   Mobile Responsive
+========================== */
+@media (max-width: 768px) {
+  .summary-container{
+    grid-template-columns: 1fr;
+  }
+
+  #expense-form{
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions{
+    flex-direction: column;
+  }
+}
 /* --- Responsive: single breakpoint at 768px --- */
 
 @media (min-width: 768px) {
@@ -414,6 +434,13 @@ transition:.3s;
     width: auto;
     min-width: 140px;
   }
+
+  .top-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    align-items:start;
+}
 }
 
 /* ==========================
@@ -466,3 +493,9 @@ transition:.3s;
       #reset-data:hover{
         background:#dc2626;
       }
+
+      .top-grid{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
