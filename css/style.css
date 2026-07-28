@@ -54,21 +54,21 @@ body {
   background: white;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 08);
+  box-shadow: 0 5px 15px rgba(0, 0, 0,0.08);
   transition:.3s;
 }
 
 .summary-card:hover{
-  transform: translate(-5px);
+  transform: translateY(-5px);
 }
 
-.Summary-card h3{
+.summary-card h3{
     font-size:15px;
     color:#666;
     margin-bottom:10px;
 }
 
-.Summary-card p{
+.summary-card p{
     font-size:28px;
     font-weight:bold;
     color:#2563eb;
@@ -395,22 +395,24 @@ transition:.3s;
 /* ==========================
    Mobile Responsive
 ========================== */
-@media (max-width: 768px) {
-  .summary-container{
-    grid-template-columns: 1fr;
-  }
+@media (max-width:768px){
 
-  #expense-form{
-    grid-template-columns: 1fr;
-  }
+.top-grid{
 
-  .form-actions{
-    flex-direction: column;
-  }
+grid-template-columns:1fr;
+
+}
+
+.summary-container{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
 }
 /* --- Responsive: single breakpoint at 768px --- */
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   /* Widen the main container slightly on larger screens */
   main {
   width: 100%;
@@ -437,7 +439,7 @@ transition:.3s;
 
   .top-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:380px 1fr;
     gap:30px;
     align-items:start;
 }
@@ -452,7 +454,7 @@ transition:.3s;
 
 .summary-container{
   display:grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 20px;
 }
 
