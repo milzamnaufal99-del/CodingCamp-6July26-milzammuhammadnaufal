@@ -410,6 +410,12 @@ grid-template-columns:repeat(2,1fr);
 }
 
 }
+
+@media (max-width:768px){
+  .bottom-grid{
+    grid-template-columns:1fr;
+  }
+}
 /* --- Responsive: single breakpoint at 768px --- */
 
 @media (min-width: 992px) {
@@ -500,4 +506,11 @@ grid-template-columns:repeat(2,1fr);
     display:flex;
     flex-direction:column;
     gap:25px;
+}
+
+      .bottom-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+    margin-top:30;
 }
