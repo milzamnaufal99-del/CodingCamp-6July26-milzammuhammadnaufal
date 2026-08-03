@@ -1,402 +1,329 @@
-/* ==========================
-   Header
-========================== */
-body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  background-color: #f5f7fb;
-  color: #1f2937;
+/* ===================================
+   EXPENSE BUDGET VISUALIZER
+   Author : Milzam
+=================================== */
+
+/* ========= RESET ========= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.header {
-  background: #2563eb;
-  color: white;
-  padding: 40px 20px;
+body{
+    font-family:"Poppins",sans-serif;
+    background:#f5f7fb;
+    color:#1f2937;
+    overflow-x:hidden;
 }
 
-.header-content {
-  max-width: 1100px;
-  margin: 0 auto;
+/* ========= MAIN ========= */
+
+main{
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 2rem;
+/* ========= HEADER ========= */
+
+.header{
+    background:#2563eb;
+    color:white;
+    padding:40px 20px;
 }
 
-.header p {
-  margin-top: 10px;
-  font-size: 1rem;
-  opacity: 0.9;
+.header-content{
+    max-width:1200px;
+    margin:auto;
 }
 
-/* ==========================
-   Dashboard Summary
-========================== */
-
-#summary-section{
-margin:0;
-padding:0;
+.header h1{
+    font-size:2.3rem;
+    margin-bottom:10px;
 }
 
-#summary-section h2 {
-  margin-bottom: 20px;
+.header p{
+    opacity:.9;
 }
 
-.summary-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+/* ========= SECTION ========= */
+
+section{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
-.summary-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0,0.08);
-  transition:.3s;
+/* ========= TOP GRID ========= */
+
+.top-grid{
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:30px;
+    align-items:start;
+    margin-bottom:30px;
+}
+
+/* ========= DASHBOARD ========= */
+
+#summary-section h2{
+    margin-bottom:20px;
+}
+
+.summary-container{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.summary-card{
+    background:#ffffff;
+    border-radius:14px;
+    padding:20px;
+    border:1px solid #e5e7eb;
+    transition:.25s;
 }
 
 .summary-card:hover{
-  transform: translateY(-5px);
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
 .summary-card h3{
-    font-size:15px;
-    color:#666;
+    font-size:.95rem;
+    color:#6b7280;
     margin-bottom:10px;
 }
 
 .summary-card p{
-    font-size:28px;
+    font-size:1.7rem;
     font-weight:bold;
     color:#2563eb;
 }
 
-/* css/style.css — Expense Budget Visualizer Styles */
+/* ========= FORM ========= */
 
-/* ===== BASE RESET ===== */
-
-/* Apply box-sizing: border-box globally */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+#input-section h2{
+    margin-bottom:20px;
 }
 
-/* Reset margin and padding */
-* {
-  margin: 0;
-  padding: 0;
+.form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
 }
 
-/* ===== TYPOGRAPHY ===== */
-
-/* Consistent font family and line height globally */
-html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-}
-
-body {
-  font-size: 16px;
-  color: #333;
-  background-color: #f8f9fa;
-}
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-}
-
-h1 {
-  font-size: 2rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-}
-
-/* ===== LAYOUT ===== */
-
-/* Vertical flexbox layout on main */
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Header styling */
-header {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin: 1rem auto;
-  max-width: 1200px;
-}
-
-/* Section layout - sections stack vertically in order: Balance_Display → Input_Form → Chart → Transaction_List */
-section {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Ensure proper stacking order */
-#input-section {
-  order: 1;
-}
-
-#chart-section {
-  order: 2;
-}
-
-#list-section {
-  order: 3;
-}
-
-
-/* ===== TASK 10.2: RESPONSIVE SIZING, SCROLLABLE LIST, EMPTY/ERROR STATES ===== */
-
-/* --- Fluid widths & overflow safety net --- */
-
-/* Prevent any content from causing horizontal scroll */
-body {
-  margin: 0;
-  overflow-x: hidden;
-  width: 100%;
-  font-family: "Poppins", sans-serif;
-  background: #f5f7fb;
-  color: #1f2937;
-}
-
-/* Constrain the main container to a readable max-width and center it */
-main {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Header mirrors main container width */
-/* ==========================
-   Header
-========================== */
-
-.header {
-  background: #2563eb;
-  color: white;
-  padding: 40px 20px;
-}
-
-.header-content {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 2.2rem;
-}
-
-.header p {
-  margin-top: 12px;
-  opacity: .9;
-}
-
-/* All sections fill their container width without overflowing */
-section {
-  width: 100%;
-  max-width: 100%;
-}
-
-/* Inputs, selects, buttons should never exceed their container */
-input,
-select,
-textarea,
-button {
-  max-width: 100%;
-}
-
-/* --- Form layout --- */
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  font-weight: 600;
-   margin-bottom: 8px;
+.form-group label{
+    margin-bottom:8px;
+    font-weight:600;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea{
 
-padding:12px 15px;
+    width:100%;
+    padding:12px 15px;
 
-font-size:1rem;
+    border:1px solid #d1d5db;
+    border-radius:10px;
 
-border:1px solid #d1d5db;
+    font-size:1rem;
 
-border-radius:10px;
+    outline:none;
 
-outline:none;
+    transition:.25s;
+}
 
-transition:.3s;
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
 
 }
 
-#expense-form button[type="submit"] {
-  padding: 0.6rem 1.25rem;
-  background-color: #0d6efd;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
+/* ========= BUTTON ========= */
+
+.form-actions{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
 }
 
-#expense-form button[type="submit"]:hover {
-  background-color: #0b5ed7;
+.form-actions button{
+
+    flex:1;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:1rem;
+
+    cursor:pointer;
+
+    transition:.25s;
+
 }
 
-/* --- Transaction list: scrollable container --- */
+.form-actions button:first-child{
 
-/* The inner div that holds transaction rows scrolls, not the section */
-#transaction-list {
-  max-height: 400px;
-  overflow-y: auto;
-  overflow-x: hidden;
+    background:#2563eb;
+
+    color:white;
+
 }
 
-/* Transaction rows */
-.transaction-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #e9ecef;
-  flex-wrap: wrap; /* allow wrapping on very narrow viewports */
+.form-actions button:first-child:hover{
+
+    background:#1d4ed8;
+
 }
 
-.transaction-row:last-child {
-  border-bottom: none;
+#reset-data{
+
+    background:#ef4444;
+
+    color:white;
+
 }
 
-.transaction-name {
-  flex: 1 1 auto;
-  font-weight: 500;
-  word-break: break-word;
-  min-width: 0;
+#reset-data:hover{
+
+    background:#dc2626;
+
 }
 
-.transaction-amount {
-  flex: 0 0 auto;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+/* ========= BOTTOM GRID ========= */
+
+.bottom-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+
 }
 
-.transaction-category {
-  flex: 0 0 auto;
-  font-size: 0.85em;
-  color: #6c757d;
-  white-space: nowrap;
+/* ========= CHART ========= */
+
+#chart-section h2{
+
+    margin-bottom:20px;
+
 }
 
-.delete-btn {
-  flex: 0 0 auto;
-  padding: 0.25rem 0.6rem;
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.8em;
-  cursor: pointer;
-  white-space: nowrap;
+#chart-empty-msg{
+
+    text-align:center;
+
+    color:#9ca3af;
+
+    margin-bottom:20px;
+
 }
 
-.delete-btn:hover {
-  background-color: #bb2d3b;
+#expense-chart{
+
+    width:100%;
+
+    max-height:380px;
+
 }
 
-/* --- Empty state messages --- */
+/* ========= TRANSACTION ========= */
 
-#list-empty-msg,
-#chart-empty-msg,
-.empty-state {
-  color: #aaa;
-  text-align: center;
-  font-style: italic;
-  padding: 1rem 0;
-  margin: 0;
+#list-section h2{
+
+    margin-bottom:20px;
+
 }
 
-/* --- Validation error messages --- */
+#transaction-list{
 
-/* These appear as <span class="error-msg"> injected by JS beneath each invalid field */
-.error-msg {
-  display: block;
-  color: #dc3545;
-  font-size: 0.85em;
-  margin-top: 4px;
+    max-height:420px;
+
+    overflow-y:auto;
+
 }
 
-/* --- Error / warning banners --- */
+.transaction-row{
 
-/* #app-banner is injected by JS with inline styles; these rules act as
-   a semantic fallback and ensure class-based banners also work */
-#app-banner,
-.error-banner,
-.warning-banner {
-  display: block;
-  padding: 10px 16px;
-  font-size: 0.9rem;
-  text-align: center;
-  border-radius: 0;     /* full-width banner: no radius */
-  width: 100%;
-  box-sizing: border-box;
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px 0;
+
+    border-bottom:1px solid #e5e7eb;
+
 }
 
-.error-banner {
-  background-color: #fdecea;
-  color: #b91c1c;
-  border-bottom: 1px solid #f87171;
+.transaction-name{
+
+    font-weight:600;
+
 }
 
-.warning-banner {
-  background-color: #fef9c3;
-  color: #854d0e;
-  border-bottom: 1px solid #fde047;
+.transaction-category{
+
+    color:#6b7280;
+
+    font-size:.9rem;
+
 }
 
-/* --- Canvas: hidden by default to prevent flash before JS runs --- */
+.transaction-amount{
 
-/* renderChart() sets display:block when data exists, or keeps it hidden.
-   This prevents the empty canvas from showing before DOMContentLoaded fires. */
-#expense-chart {
-  display: none;
-  width: 100%;
-  max-width: 100%;
+    font-weight:bold;
+
 }
 
-/* ==========================
-   Mobile Responsive
-========================== */
-@media (max-width:768px){
+.delete-btn{
+
+    border:none;
+
+    background:#ef4444;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.delete-btn:hover{
+
+    background:#dc2626;
+
+}
+
+/* ========= MOBILE ========= */
+
+@media(max-width:991px){
 
 .top-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.bottom-grid{
 
 grid-template-columns:1fr;
 
@@ -410,107 +337,26 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
-@media (max-width:768px){
-  .bottom-grid{
-    grid-template-columns:1fr;
-  }
-}
-/* --- Responsive: single breakpoint at 768px --- */
+/* ========= PHONE ========= */
 
-@media (min-width: 992px) {
-  /* Widen the main container slightly on larger screens */
-  main {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 30px 20px;
-}
+@media(max-width:600px){
 
-  header {
-    max-width: 900px;
-    padding: 2rem;
-  }
+.header h1{
 
-  /* Requirement 6.1: sections MUST remain in vertical order at all viewport widths.
-     Balance_Display → Input_Form → Chart → Transaction_List.
-     A side-by-side grid would place form and chart at the same vertical level,
-     violating Req 6.1, so we keep the flex column on all screen sizes. */
+font-size:1.7rem;
 
-  /* Submit button doesn't need to be full-width on wider screens */
-  #expense-form button[type="submit"] {
-    width: auto;
-    min-width: 140px;
-  }
-
-  .top-grid{
-    display:grid;
-    grid-template-columns:380px 1fr;
-    gap:30px;
-    align-items:start;
-}
-}
-
-/* ==========================
-   Dashboard Summary
-========================== */
-#summary-section{
-    margin-bottom:40px;
 }
 
 .summary-container{
-  display:grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 20px;
+
+grid-template-columns:1fr;
+
 }
 
-.summary-card{
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 08);
+.form-actions{
+
+flex-direction:column;
+
 }
 
-.summary-card h3{
-  margin: 0;
-  font-size: 1rem;
-  color: #6b7280;
-}
-
-.summary-card p{
-  margin-top: 12px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #111827;
-}
-
- .form-actions{
-        display:flex;
-        gap:15px;
-        margin-top:20px;
-      }
-
-      .form-actions button{
-        flex:1;
-      }
-
-      #reset-data{
-        background:#ef4444;
-      }
-
-      #reset-data:hover{
-        background:#dc2626;
-      }
-
-   .top-grid{
-display:grid;
-grid-template-columns:380px 1fr;
-gap:30px;
-align-items:start;
-}
-
-      .bottom-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:30px;
-    margin-top:30px;
 }
