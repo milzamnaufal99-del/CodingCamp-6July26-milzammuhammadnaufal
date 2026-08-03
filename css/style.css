@@ -34,10 +34,9 @@ body {
    Dashboard Summary
 ========================== */
 
-#summary-section {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
+#summary-section{
+margin:0;
+padding:0;
 }
 
 #summary-section h2 {
@@ -182,7 +181,7 @@ body {
 /* Constrain the main container to a readable max-width and center it */
 main {
   width: 100%;
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -502,15 +501,16 @@ grid-template-columns:repeat(2,1fr);
         background:#dc2626;
       }
 
-      .top-grid{
-    display:flex;
-    flex-direction:column;
-    gap:25px;
+   .top-grid{
+display:grid;
+grid-template-columns:380px 1fr;
+gap:30px;
+align-items:start;
 }
 
       .bottom-grid{
     display:grid;
     grid-template-columns:2fr 1fr;
     gap:30px;
-    margin-top:30;
+    margin-top:30px;
 }
