@@ -162,11 +162,15 @@
     }
 
     // Create new transaction object and add to transactions array
+    const transactionsType =
+    document.getElementById("transactions-type").value;
+    
     const newTransaction = {
       id: id,
       name: name,
       amount: parseFloat(amount),
-      category: category
+      category: category,
+      type:transactionsType
     };
 
     transactions.push(newTransaction);
@@ -246,11 +250,33 @@
    * Satisfies Requirements 3.1, 3.2, 3.3, 3.5.
    */
   function renderBalance() {
-    const total = transactions.reduce((sum, t) => sum + t.amount, 0);
-    const balanceElement = document.getElementById('balance-display');
-    if (balanceElement) {
-      balanceElement.textContent = currencyFormatter.format(total);
-    }
+   let totalIncome = 0;
+   let totalExpense = 0;
+
+   transactions.forEach(transactions => {
+
+    if (transactions.type === "income") {
+    totalIncome += Number(transactions.amount);
+  } else {
+    totalExpense += Number(transaction.amount);
+  }
+  });
+
+  const totalBalance = totalIncome - totalExpense;
+  const totalSaving = totalBalance;
+
+  document.getElementById("total-income").textContent =
+    currencyFormatter.format(totalIncome);
+
+  document.getElementById("total-expanse").textContent =
+    currencyFormatter.format(totalExpense);
+
+  document.getElementById("total-totalBalance").textContent =
+    currencyFormatter.format(totalBalance);
+
+  document.getElementById("total-savings").textContent =
+    currencyFormatter.format(totalSaving);
+
   }
 
   /**
@@ -415,26 +441,38 @@
    * Called after every transaction mutation to keep UI in sync.
    * Satisfies Requirements 2.3, 3.2, 4.3, 5.3.
    */
+
+  // =======================================
+// RENDER FUNCTIONS
+// =======================================
+
+function renderBalance() {
+}
+  // =======================================
+// APP RENDER
+// =======================================
+
   function renderAll() {
     renderBalance();
     renderChart();
     renderList();
   }
 
-  // --- Init ---
+ // =======================================
+// INITIALIZE APP
+// =======================================
 
-  /**
-   * Initialize the application when DOM is ready.
-   * Loads transactions from localStorage and renders the UI.
-   */
   document.addEventListener('DOMContentLoaded', function () {
+
     transactions = loadTransactions();
     renderAll();
-    
-    // Attach form submit handler
+
     const form = document.getElementById('expense-form');
+
     if (form) {
-      form.addEventListener('submit', handleFormSubmit);
+        form.addEventListener('submit', handleFormSubmit);
     }
-  });
+
+});
+
 })();
