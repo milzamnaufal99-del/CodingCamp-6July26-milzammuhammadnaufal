@@ -39,27 +39,35 @@
   // CURRENCY FORMAT
   // =========================================
 
-  function formatCurrency(amount, currency = "IDR") {
+  const BASE_CURRENCY = "IDR";
 
-    const currencyLocale = {
+  const EXCHANGE_RATES = {
+    IDR: 1,
+    JPY: 110,
+    USD: 17801
+  };
+
+  function formatCurrency(amount, currency = "IDR") {
+    const currencyMap ={
       IDR: "id-ID",
       JPY: "ja-JP",
       USD: "en-US"
     };
 
-    return new Intl.NumberFormat(
-      currencyLocale[currency] || "id-ID",
-      {
-        style: "currency",
-        currency: currency,
-        minimumFractionDigits:
-          currency === "IDR" || currency === "JPY" ? 0 : 2,
-        maximumFractionDigits:
-          currency === "IDR" || currency === "JPY" ? 0 : 2
-      }
-    ).format(Number(amount) || 0);
+    return new Intl.NumberFormat(currencyMap[currency] || "id-ID",{
+      style: "currency",
+      currency,
+      minimumFractionDigits:
+        currency === "IDR" || currency === "JPY" ? 0 : 2,
+      maximumFranctionDigits:
+        currency === "IDR" || currency === "JPY" ? 0 : 2
+  }).format(Number(amount) || 0);
   }
 
+  function cunvertToIDR(amount, currency) {
+    const rate = EXCHANGE_RATES[currency] || 1;
+    return Number(amount) * rate;
+  }
 
   // =========================================
   // BANNER / ERROR
@@ -476,89 +484,43 @@
     let totalIncome = 0;
     let totalExpense = 0;
 
+  transactions.forEach((transaction) => {
+    const amount = Number(transaction.amount) || 0;
+    const currency = transaction.currency || BASE_CURRENCY;
 
-    transactions.forEach(
-      (transaction) => {
+    const amountInIDR = convertToIDR(amount, currency);
 
-        const amount =
-          Number(transaction.amount) || 0;
-
-
-        if (
-          transaction.type === "income"
-        ) {
-
-          totalIncome += amount;
-
-        } else {
-
-          totalExpense += amount;
-        }
-      }
-    );
-
-
-    const totalBalance =
-      totalIncome - totalExpense;
-
-
-    const totalSavings =
-      totalBalance;
-
-
-    const incomeElement =
-      $("total-income");
-
-    const expenseElement =
-      $("total-expense");
-
-    const balanceElement =
-      $("total-balance");
-
-    const savingsElement =
-      $("total-savings");
-
-
-    if (incomeElement) {
-
-      incomeElement.textContent =
-        formatCurrency(
-          totalIncome,
-          "IDR"
-        );
+    if (transaction.type === "income") {
+      totalIncome += amountInIDR;
+    } else {
+      totalExpense += amountInIDR;
     }
+  });
 
+  const totalBalace = totalIncome - totalExpense;
+  const totalSavings = totalBalace;
 
-    if (expenseElement) {
+  const incomeElement = $ ("total-income");
+  const expenseElement = $ ("total-expense");
+  const balanceElement = $ ("total-balance");
+  const savingsElement = $ (total-savings);
 
-      expenseElement.textContent =
-        formatCurrency(
-          totalExpense,
-          "IDR"
-        );
-    }
-
-
-    if (balanceElement) {
-
-      balanceElement.textContent =
-        formatCurrency(
-          totalBalance,
-          "IDR"
-        );
-    }
-
-
-    if (savingsElement) {
-
-      savingsElement.textContent =
-        formatCurrency(
-          totalSavings,
-          "IDR"
-        );
-    }
+  if (incomeElement) {
+    incomeElement.textContent = formatCurrency(totalIncome, BASE_CURRENCY);
   }
 
+  if (expenseElement) {
+    expenseElement.textContent = formatCurrency(totalExpense, BASE_CURRENCY);
+  }
+
+  if (balanceElement) {
+    balanceElement.textContent = formatCurrency(totalBalace, BASE_CURRENCY);
+  }
+
+  if (savingsElement) {
+    savingsElement.textContent = formatCurrency(totalSavings, BASE_CURRENCY);
+  }
+}
 
   // =========================================
   // TRANSACTION LIST
