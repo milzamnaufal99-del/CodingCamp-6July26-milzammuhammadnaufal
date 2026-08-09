@@ -1,23 +1,36 @@
 (() => {
 
-  // =========================================
-  // CONSTANTS
-  // =========================================
+ // =========================================
+// CONSTANTS
+// =========================================
 
-  const STORAGE_KEY = "expense_visualizer_transactions";
+const STORAGE_KEY = "expense_visualizer_transactions";
 
-  const CATEGORIES = [
-    "Food",
-    "Transport",
-    "Shopping",
-    "Bills",
-    "Entertainment",
-    "Education",
-    "Health",
-    "Salary",
-    "Freelance",
-    "Investment"
-  ];
+const CATEGORIES = [
+  "Food",
+  "Transport",
+  "Shopping",
+  "Bills",
+  "Entertainment",
+  "Education",
+  "Health",
+  "Salary",
+  "Freelance",
+  "Investment"
+];
+
+const BASE_CURRENCY = "IDR";
+
+const EXCHANGE_RATES = {
+  IDR: 1,
+  JPY: 110,
+  USD: 17000
+};
+
+function convertToIDR(amount, currency) {
+  const rate = EXCHANGE_RATES[currency] || 1;
+  return amount * rate;
+}
 
 
   // =========================================
@@ -38,14 +51,6 @@
   // =========================================
   // CURRENCY FORMAT
   // =========================================
-
-  const BASE_CURRENCY = "IDR";
-
-  const EXCHANGE_RATES = {
-    IDR: 1,
-    JPY: 110,
-    USD: 17801
-  };
 
   function formatCurrency(amount, currency = "IDR") {
     const currencyMap ={
