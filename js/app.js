@@ -497,13 +497,13 @@
     }
   });
 
-  const totalBalace = totalIncome - totalExpense;
-  const totalSavings = totalBalace;
+  const totalBalance = totalIncome - totalExpense;
+  const totalSavings = totalBalance;
 
   const incomeElement = $ ("total-income");
   const expenseElement = $ ("total-expense");
   const balanceElement = $ ("total-balance");
-  const savingsElement = $ (total-savings);
+  const savingsElement = $ ("total-savings");
 
   if (incomeElement) {
     incomeElement.textContent = formatCurrency(totalIncome, BASE_CURRENCY);
