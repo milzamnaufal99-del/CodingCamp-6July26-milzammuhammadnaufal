@@ -64,14 +64,9 @@ function convertToIDR(amount, currency) {
       currency,
       minimumFractionDigits:
         currency === "IDR" || currency === "JPY" ? 0 : 2,
-      maximumFranctionDigits:
+      maximumFractionDigits:
         currency === "IDR" || currency === "JPY" ? 0 : 2
   }).format(Number(amount) || 0);
-  }
-
-  function cunvertToIDR(amount, currency) {
-    const rate = EXCHANGE_RATES[currency] || 1;
-    return Number(amount) * rate;
   }
 
   // =========================================
@@ -519,7 +514,7 @@ function convertToIDR(amount, currency) {
   }
 
   if (balanceElement) {
-    balanceElement.textContent = formatCurrency(totalBalace, BASE_CURRENCY);
+    balanceElement.textContent = formatCurrency(totalBalance, BASE_CURRENCY);
   }
 
   if (savingsElement) {
