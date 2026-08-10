@@ -32,6 +32,18 @@ function convertToIDR(amount, currency) {
   return amount * rate;
 }
 
+function parseAmount(value, currency) {
+  let amount = String(value).trim();
+
+  if (currency === "IDR" || currency === "JPY") {
+    amount = amount.replace(/[.,]/g, "");
+  } else if (currency === "USD") {
+    amount = amount.replace(/,/g, "");
+  }
+
+  return Number(amount);
+}
+
 
   // =========================================
   // STATE
@@ -223,8 +235,9 @@ function convertToIDR(amount, currency) {
 
 
     // Validate amount
-    const numericAmount =
-      Number(amount);
+    const numericAmount = Number(
+  String(amount).replace(/[.,]/g, "")
+);
 
     if (
       amount === "" ||
@@ -389,23 +402,26 @@ function convertToIDR(amount, currency) {
       title: title,
 
       amount:
-        Number(amount),
+        parseAmount(
+          amount,
+          currencyInput.value
+  ),
 
       currency:
-        currencyInput.value,
+          currencyInput.value,
 
       category:
-        category,
+          category,
 
       date:
-        dateInput
-          ? dateInput.value
-          : "",
+          dateInput
+            ? dateInput.value
+            : "",
 
       note:
-        noteInput
-          ? noteInput.value.trim()
-          : ""
+          noteInput
+            ? noteInput.value.trim()
+            : ""
     };
 
 
