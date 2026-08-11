@@ -623,121 +623,217 @@ function parseAmount(value, currency) {
 
   function renderList() {
 
-    const listContainer =
-      $("transaction-list");
+  const listContainer =
+    $("transaction-list");
+
+  if (!listContainer) {
+    return;
+  }
+
+  listContainer.innerHTML = "";
 
 
-    if (!listContainer) {
-      return;
-    }
+  // =========================================
+  // EMPTY STATE
+  // =========================================
+
+  if (transactions.length === 0) {
+
+    const emptyMessage =
+      document.createElement("p");
+
+    emptyMessage.id =
+      "list-empty-msg";
+
+    emptyMessage.textContent =
+      "No transactions recorded yet.";
+
+    listContainer.appendChild(
+      emptyMessage
+    );
+
+    return;
+  }
 
 
-    listContainer.innerHTML = "";
+  // =========================================
+  // RENDER TRANSACTIONS
+  // =========================================
+
+  transactions.forEach(
+    (transaction) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "transaction-row";
 
 
-    // Empty state
-    if (transactions.length === 0) {
+      // -----------------------------------------
+      // Transaction title
+      // -----------------------------------------
 
-      const emptyMessage =
-        document.createElement("p");
+      const name =
+        document.createElement("span");
 
-      emptyMessage.id =
-        "list-empty-msg";
+      name.className =
+        "transaction-name";
 
-      emptyMessage.textContent =
-        "No transactions recorded yet.";
-
-      listContainer.appendChild(
-        emptyMessage
-      );
-
-      return;
-    }
+      name.textContent =
+        transaction.title ||
+        "Untitled";
 
 
-    // Render transactions
-    transactions.forEach(
-      (transaction) => {
+      // -----------------------------------------
+      // Transaction amount
+      // -----------------------------------------
 
-        const row =
-          document.createElement("div");
+      const amount =
+        document.createElement("span");
 
-        row.className =
-          "transaction-row";
+      amount.className =
+        "transaction-amount";
 
-
-        const name =
-          document.createElement("span");
-
-        name.className =
-          "transaction-name";
-
-        name.textContent =
-          transaction.title ||
-          "Untitled";
-
-
-        const amount =
-          document.createElement("span");
-
-        amount.className =
-          "transaction-amount";
-
-        amount.textContent =
-          formatCurrency(
-            transaction.amount,
-            transaction.currency || "IDR"
-          );
-
-
-        const category =
-          document.createElement("span");
-
-        category.className =
-          "transaction-category";
-
-        category.textContent =
-          transaction.category;
-
-
-        const deleteButton =
-          document.createElement("button");
-
-        deleteButton.className =
-          "delete-btn";
-
-        deleteButton.type =
-          "button";
-
-        deleteButton.textContent =
-          "Delete";
-
-
-        deleteButton.addEventListener(
-          "click",
-          () => {
-
-            handleDeleteClick(
-              transaction.id
-            );
-          }
+      amount.textContent =
+        formatCurrency(
+          transaction.amount,
+          transaction.currency ||
+          BASE_CURRENCY
         );
 
 
-        row.appendChild(name);
+      // -----------------------------------------
+      // Transaction category
+      // -----------------------------------------
 
-        row.appendChild(amount);
+      const category =
+        document.createElement("span");
 
-        row.appendChild(category);
+      category.className =
+        "transaction-category";
 
-        row.appendChild(deleteButton);
+      category.textContent =
+        transaction.category ||
+        "Uncategorized";
 
 
-        listContainer.appendChild(row);
+      // -----------------------------------------
+      // Transaction type
+      // -----------------------------------------
+
+      const type =
+        document.createElement("span");
+
+      type.className =
+        "transaction-type";
+
+      type.textContent =
+        transaction.type === "income"
+          ? "Income"
+          : "Expense";
+
+
+      // -----------------------------------------
+      // Transaction date
+      // -----------------------------------------
+
+      const date =
+        document.createElement("span");
+
+      date.className =
+        "transaction-date";
+
+      if (transaction.date) {
+
+        date.textContent =
+          transaction.date;
+
+      } else {
+
+        date.textContent =
+          "No date";
+
       }
-    );
-  }
 
+
+      // -----------------------------------------
+      // Transaction note
+      // -----------------------------------------
+
+      const note =
+        document.createElement("span");
+
+      note.className =
+        "transaction-note";
+
+      note.textContent =
+        transaction.note ||
+        "";
+
+
+      // -----------------------------------------
+      // Delete button
+      // -----------------------------------------
+
+      const deleteButton =
+        document.createElement("button");
+
+      deleteButton.className =
+        "delete-btn";
+
+      deleteButton.type =
+        "button";
+
+      deleteButton.textContent =
+        "Delete";
+
+
+      deleteButton.addEventListener(
+        "click",
+        () => {
+
+          handleDeleteClick(
+            transaction.id
+          );
+
+        }
+      );
+
+
+      // =========================================
+      // ADD ELEMENTS TO ROW
+      // =========================================
+
+      row.appendChild(name);
+
+      row.appendChild(amount);
+
+      row.appendChild(category);
+
+      row.appendChild(type);
+
+      row.appendChild(date);
+
+      if (transaction.note) {
+
+        row.appendChild(note);
+
+      }
+
+      row.appendChild(
+        deleteButton
+      );
+
+
+      listContainer.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
 
   // =========================================
   // CHART
