@@ -497,45 +497,124 @@ function parseAmount(value, currency) {
 
   function renderBalance() {
 
-    let totalIncome = 0;
-    let totalExpense = 0;
+  let totalIncome = 0;
+  let totalExpense = 0;
 
+  // Calculate income and expense in IDR
   transactions.forEach((transaction) => {
+
     const amount = Number(transaction.amount) || 0;
     const currency = transaction.currency || BASE_CURRENCY;
 
-    const amountInIDR = convertToIDR(amount, currency);
+    const amountInIDR =
+      convertToIDR(amount, currency);
 
     if (transaction.type === "income") {
       totalIncome += amountInIDR;
     } else {
       totalExpense += amountInIDR;
     }
+
   });
 
-  const totalBalance = totalIncome - totalExpense;
-  const totalSavings = totalBalance;
+  // Calculate balance and savings
+  const totalBalance =
+    totalIncome - totalExpense;
 
-  const incomeElement = $ ("total-income");
-  const expenseElement = $ ("total-expense");
-  const balanceElement = $ ("total-balance");
-  const savingsElement = $ ("total-savings");
+  const totalSavings =
+    totalBalance;
 
+  // Calculate expense rate
+  const expenseRate =
+    totalIncome > 0
+      ? (totalExpense / totalIncome) * 100
+      : 0;
+
+  // Get dashboard elements
+  const incomeElement =
+    $("total-income");
+
+  const expenseElement =
+    $("total-expense");
+
+  const balanceElement =
+    $("total-balance");
+
+  const savingsElement =
+    $("total-savings");
+
+  const transactionCountElement =
+    $("transaction-count");
+
+  const expenseRateElement =
+    $("expense-rate");
+
+
+  // Update income
   if (incomeElement) {
-    incomeElement.textContent = formatCurrency(totalIncome, BASE_CURRENCY);
+
+    incomeElement.textContent =
+      formatCurrency(
+        totalIncome,
+        BASE_CURRENCY
+      );
+
   }
 
+
+  // Update expense
   if (expenseElement) {
-    expenseElement.textContent = formatCurrency(totalExpense, BASE_CURRENCY);
+
+    expenseElement.textContent =
+      formatCurrency(
+        totalExpense,
+        BASE_CURRENCY
+      );
+
   }
 
+
+  // Update balance
   if (balanceElement) {
-    balanceElement.textContent = formatCurrency(totalBalance, BASE_CURRENCY);
+
+    balanceElement.textContent =
+      formatCurrency(
+        totalBalance,
+        BASE_CURRENCY
+      );
+
   }
 
+
+  // Update savings
   if (savingsElement) {
-    savingsElement.textContent = formatCurrency(totalSavings, BASE_CURRENCY);
+
+    savingsElement.textContent =
+      formatCurrency(
+        totalSavings,
+        BASE_CURRENCY
+      );
+
   }
+
+
+  // Update transaction count
+  if (transactionCountElement) {
+
+    transactionCountElement.textContent =
+      transactions.length;
+
+  }
+
+
+  // Update expense rate
+  if (expenseRateElement) {
+
+    expenseRateElement.textContent =
+      `${expenseRate.toFixed(1)}%`;
+
+  }
+
 }
 
   // =========================================
