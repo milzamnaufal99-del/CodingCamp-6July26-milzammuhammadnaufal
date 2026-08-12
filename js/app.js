@@ -874,22 +874,32 @@ function parseAmount(value, currency) {
 
 
     expenseTransactions.forEach(
-      (transaction) => {
+  (transaction) => {
 
-        if (
-          categoryTotals[
-            transaction.category
-          ] !== undefined
-        ) {
+    if (
+      categoryTotals[
+        transaction.category
+      ] !== undefined
+    ) {
 
-          categoryTotals[
-            transaction.category
-          ] +=
-            Number(transaction.amount) || 0;
-        }
-      }
-    );
+      const amount =
+        Number(transaction.amount) || 0;
 
+      const currency =
+        transaction.currency || BASE_CURRENCY;
+
+      const amountInIDR =
+        convertToIDR(
+          amount,
+          currency
+        );
+
+      categoryTotals[
+        transaction.category
+      ] += amountInIDR;
+    }
+  }
+);
 
     const categoriesWithData =
       CATEGORIES.filter(
