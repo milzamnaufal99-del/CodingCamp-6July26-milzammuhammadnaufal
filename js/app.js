@@ -33,12 +33,99 @@ function convertToIDR(amount, currency) {
 }
 
 function parseAmount(value, currency) {
+
   let amount = String(value).trim();
 
+  // IDR dan JPY:
+  // 10.000 -> 10000
+  // 226.000 -> 226000
   if (currency === "IDR" || currency === "JPY") {
+
     amount = amount.replace(/[.,]/g, "");
-  } else if (currency === "USD") {
-    amount = amount.replace(/,/g, "");
+
+  }
+
+  // USD:
+  // 40,000 -> 40000
+  // 40.000 -> 40000
+  // 40,000.50 -> 40000.50
+  // 40.50 -> 40.50
+  else if (currency === "USD") {
+
+    // Both comma and dot exist:
+    // Assume the last separator is the decimal separator.
+    if (
+      amount.includes(",") &&
+      amount.includes(".")
+    ) {
+
+      const lastComma =
+        amount.lastIndexOf(",");
+
+      const lastDot =
+        amount.lastIndexOf(".");
+
+      if (lastDot > lastComma) {
+
+        // 40,000.50
+        amount =
+          amount.replace(/,/g, "");
+
+      } else {
+
+        // 40.000,50
+        amount =
+          amount
+            .replace(/\./g, "")
+            .replace(",", ".");
+      }
+
+    }
+
+    // Only comma
+    else if (amount.includes(",")) {
+
+      const parts =
+        amount.split(",");
+
+      // 40,000 -> 40000
+      if (
+        parts.length === 2 &&
+        parts[1].length === 3
+      ) {
+
+        amount =
+          amount.replace(",", "");
+
+      } else {
+
+        // 40,50 -> 40.50
+        amount =
+          amount.replace(",", ".");
+
+      }
+    }
+
+    // Only dot
+    else if (amount.includes(".")) {
+
+      const parts =
+        amount.split(".");
+
+      // 40.000 -> 40000
+      if (
+        parts.length === 2 &&
+        parts[1].length === 3
+      ) {
+
+        amount =
+          amount.replace(".", "");
+
+      }
+
+      // Otherwise keep it as decimal
+      // Example: 40.50
+    }
   }
 
   return Number(amount);
