@@ -138,7 +138,7 @@ function parseAmount(value, currency) {
 
   let transactions = [];
   let chartInstance = null;
-
+  let currentFilter = "all";
 
   // =========================================
   // DOM HELPER
@@ -721,34 +721,49 @@ function parseAmount(value, currency) {
 
 
   // =========================================
-  // EMPTY STATE
-  // =========================================
+// FILTER TRANSACTIONS
+// =========================================
 
-  if (transactions.length === 0) {
+const filteredTransactions =
+  currentFilter === "all"
+    ? transactions
+    : transactions.filter(
+        (transaction) =>
+          transaction.type === currentFilter
+      );
 
-    const emptyMessage =
-      document.createElement("p");
 
-    emptyMessage.id =
-      "list-empty-msg";
+// =========================================
+// EMPTY STATE
+// =========================================
 
-    emptyMessage.textContent =
-      "No transactions recorded yet.";
+if (filteredTransactions.length === 0) {
 
-    listContainer.appendChild(
-      emptyMessage
-    );
+  const emptyMessage =
+    document.createElement("p");
 
-    return;
-  }
+  emptyMessage.id =
+    "list-empty-msg";
+
+  emptyMessage.textContent =
+    transactions.length === 0
+      ? "No transactions recorded yet."
+      : `No ${currentFilter} transactions found.`;
+
+  listContainer.appendChild(
+    emptyMessage
+  );
+
+  return;
+}
 
 
   // =========================================
   // RENDER TRANSACTIONS
   // =========================================
 
-  transactions.forEach(
-    (transaction) => {
+  filteredTransactions.forEach(
+  (transaction) => {
 
       const row =
         document.createElement("div");
@@ -1227,6 +1242,36 @@ function parseAmount(value, currency) {
           handleResetData
         );
       }
+      // =========================================
+// TRANSACTION FILTER
+// =========================================
+
+const filterButtons =
+  document.querySelectorAll(".filter-btn");
+
+filterButtons.forEach(
+  (button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        currentFilter =
+          button.dataset.filter;
+
+        filterButtons.forEach(
+          (btn) => {
+            btn.classList.remove("active");
+          }
+        );
+
+        button.classList.add("active");
+
+        renderList();
+      }
+    );
+  }
+);
     }
   );
 

@@ -360,3 +360,53 @@ flex-direction:column;
 }
 
 }
+
+/* =========================================
+   TRANSACTION FILTER
+========================================= */
+
+.transaction-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #6b7280;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.filter-btn:hover {
+  background: #f3f4f6;
+}
+
+.filter-btn.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+
+/* =========================================
+   MOBILE FILTER
+========================================= */
+
+@media (max-width: 600px) {
+
+  .transaction-filters {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    flex: 1;
+    padding: 9px 10px;
+  }
+
+}
