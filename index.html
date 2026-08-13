@@ -192,6 +192,7 @@
            <!-- Transaction_List -->
       <section id="list-section">
         <h2>Transactions</h2>
+
         <div class="transaction-filters">
       <button type="button" class="filter-btn active" data-filter="all">
         All
@@ -205,6 +206,14 @@
         Expense
         </button>
 </div>
+
+      <input
+      type="text"
+      id="transaction-search"
+      placeholder="Search transactions..."
+      autocomplete="off"
+      />
+      
         <div id="transaction-list">
           <p id="list-empty-msg">No transactions recorded yet.</p>
         </div>

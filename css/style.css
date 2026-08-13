@@ -410,3 +410,31 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   TRANSACTION SEARCH
+========================================= */
+
+#transaction-search {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 15px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  font-size: 0.95rem;
+  outline: none;
+
+  transition: 0.2s;
+}
+
+#transaction-search:focus {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#transaction-search::placeholder {
+  color: #9ca3af;
+}

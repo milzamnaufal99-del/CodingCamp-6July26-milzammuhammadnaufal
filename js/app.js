@@ -139,6 +139,7 @@ function parseAmount(value, currency) {
   let transactions = [];
   let chartInstance = null;
   let currentFilter = "all";
+  let searchQuery = "";
 
   // =========================================
   // DOM HELPER
@@ -725,12 +726,34 @@ function parseAmount(value, currency) {
 // =========================================
 
 const filteredTransactions =
-  currentFilter === "all"
-    ? transactions
-    : transactions.filter(
-        (transaction) =>
-          transaction.type === currentFilter
-      );
+  transactions.filter((transaction) => {
+
+    // Filter berdasarkan type
+    const matchesFilter =
+      currentFilter === "all" ||
+      transaction.type === currentFilter;
+
+    // Filter berdasarkan search
+    const query =
+      searchQuery.toLowerCase();
+
+    const matchesSearch =
+      query === "" ||
+      (transaction.title || "")
+        .toLowerCase()
+        .includes(query) ||
+      (transaction.category || "")
+        .toLowerCase()
+        .includes(query) ||
+      (transaction.note || "")
+        .toLowerCase()
+        .includes(query) ||
+      (transaction.currency || "")
+        .toLowerCase()
+        .includes(query);
+
+    return matchesFilter && matchesSearch;
+  });
 
 
 // =========================================
@@ -1272,6 +1295,28 @@ filterButtons.forEach(
     );
   }
 );
+
+// =========================================
+// TRANSACTION SEARCH
+// =========================================
+
+const searchInput =
+  $("transaction-search");
+
+if (searchInput) {
+
+  searchInput.addEventListener(
+    "input",
+    () => {
+
+      searchQuery =
+        searchInput.value.trim();
+
+      renderList();
+    }
+  );
+
+}
     }
   );
 
