@@ -466,3 +466,21 @@ flex-direction:column;
   box-shadow:
     0 0 0 3px rgba(37, 99, 235, 0.12);
 }
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}

@@ -141,6 +141,7 @@ function parseAmount(value, currency) {
   let currentFilter = "all";
   let searchQuery = "";
   let currentSort = "latest";
+  let currentEditingId = null;
 
   // =========================================
   // DOM HELPER
@@ -362,174 +363,389 @@ function parseAmount(value, currency) {
 
   function handleFormSubmit(event) {
 
-    event.preventDefault();
+  event.preventDefault();
 
-    clearErrorMessages();
-
-
-    // Get form elements
-    const typeInput =
-      $("transactions-type");
-
-    const titleInput =
-      $("transaction-title");
-
-    const amountInput =
-      $("transaction-amount");
-
-    const currencyInput =
-      $("transaction-currency");
-
-    const categoryInput =
-      $("transaction-category");
-
-    const dateInput =
-      $("transaction-date");
-
-    const noteInput =
-      $("transaction-note");
+  clearErrorMessages();
 
 
-    // Make sure required fields exist
-    if (
-      !typeInput ||
-      !titleInput ||
-      !amountInput ||
-      !currencyInput ||
-      !categoryInput
-    ) {
+  // =========================================
+  // GET FORM ELEMENTS
+  // =========================================
 
-      showBanner(
-        "Some form fields could not be found.",
-        "error"
-      );
+  const typeInput =
+    $("transactions-type");
 
-      return;
-    }
+  const titleInput =
+    $("transaction-title");
 
+  const amountInput =
+    $("transaction-amount");
 
-    // Read values
-    const title =
-      titleInput.value.trim();
+  const currencyInput =
+    $("transaction-currency");
 
-    const amount =
-      amountInput.value;
+  const categoryInput =
+    $("transaction-category");
 
-    const category =
-      categoryInput.value;
+  const dateInput =
+    $("transaction-date");
+
+  const noteInput =
+    $("transaction-note");
 
 
-    // Validate
-    const validation =
-      validateForm(
-        title,
-        amount,
-        category
-      );
+  // =========================================
+  // CHECK REQUIRED ELEMENTS
+  // =========================================
+
+  if (
+    !typeInput ||
+    !titleInput ||
+    !amountInput ||
+    !currencyInput ||
+    !categoryInput
+  ) {
+
+    showBanner(
+      "Some form fields could not be found.",
+      "error"
+    );
+
+    return;
+  }
 
 
-    if (!validation.valid) {
+  // =========================================
+  // READ VALUES
+  // =========================================
 
-      if (validation.errors.title) {
+  const title =
+    titleInput.value.trim();
 
-        showFieldError(
-          "transaction-title",
-          validation.errors.title
-        );
-      }
+  const amount =
+    amountInput.value;
 
-      if (validation.errors.amount) {
+  const category =
+    categoryInput.value;
 
-        showFieldError(
-          "transaction-amount",
-          validation.errors.amount
-        );
-      }
-
-      if (validation.errors.category) {
-
-        showFieldError(
-          "transaction-category",
-          validation.errors.category
-        );
-      }
-
-      return;
-    }
+  const currency =
+    currencyInput.value;
 
 
-    // Generate ID
-    let id;
+  // =========================================
+  // VALIDATE
+  // =========================================
 
-    if (
-      typeof crypto !== "undefined" &&
-      crypto.randomUUID
-    ) {
-
-      id = crypto.randomUUID();
-
-    } else {
-
-      id =
-        Date.now().toString() +
-        Math.random()
-          .toString(36)
-          .slice(2);
-    }
-
-
-    // Create transaction
-    const newTransaction = {
-
-      id: id,
-
-      type:
-        typeInput.value === "income"
-          ? "income"
-          : "expense",
-
-      title: title,
-
-      amount:
-        parseAmount(
-          amount,
-          currencyInput.value
-  ),
-
-      currency:
-          currencyInput.value,
-
-      category:
-          category,
-
-      date:
-          dateInput
-            ? dateInput.value
-            : "",
-
-      note:
-          noteInput
-            ? noteInput.value.trim()
-            : ""
-    };
-
-
-    // Add transaction
-    transactions.push(
-      newTransaction
+  const validation =
+    validateForm(
+      title,
+      amount,
+      category
     );
 
 
-    // Save + render
-    saveTransactions();
+  if (!validation.valid) {
 
-    renderAll();
+    if (validation.errors.title) {
 
+      showFieldError(
+        "transaction-title",
+        validation.errors.title
+      );
 
-    // Reset form
-    event.target.reset();
+    }
+
+    if (validation.errors.amount) {
+
+      showFieldError(
+        "transaction-amount",
+        validation.errors.amount
+      );
+
+    }
+
+    if (validation.errors.category) {
+
+      showFieldError(
+        "transaction-category",
+        validation.errors.category
+      );
+
+    }
+
+    return;
   }
 
+
+  // =========================================
+  // EDIT EXISTING TRANSACTION
+  // =========================================
+
+  if (currentEditingId) {
+
+    const transaction =
+      transactions.find(
+        (item) =>
+          item.id === currentEditingId
+      );
+
+    if (transaction) {
+
+      transaction.type =
+        typeInput.value === "income"
+          ? "income"
+          : "expense";
+
+      transaction.title =
+        title;
+
+      transaction.amount =
+        parseAmount(
+          amount,
+          currency
+        );
+
+      transaction.currency =
+        currency;
+
+      transaction.category =
+        category;
+
+      transaction.date =
+        dateInput
+          ? dateInput.value
+          : "";
+
+      transaction.note =
+        noteInput
+          ? noteInput.value.trim()
+          : "";
+
+      saveTransactions();
+
+      renderAll();
+
+      currentEditingId = null;
+
+      event.target.reset();
+
+      const submitButton =
+        event.target.querySelector(
+          'button[type="submit"]'
+        );
+
+      if (submitButton) {
+        submitButton.textContent =
+          "Save Transaction";
+      }
+
+      return;
+    }
+
+  }
+
+
+  // =========================================
+  // CREATE NEW TRANSACTION
+  // =========================================
+
+  let id;
+
+  if (
+    typeof crypto !== "undefined" &&
+    crypto.randomUUID
+  ) {
+
+    id = crypto.randomUUID();
+
+  } else {
+
+    id =
+      Date.now().toString() +
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+  }
+
+
+  const newTransaction = {
+
+    id: id,
+
+    type:
+      typeInput.value === "income"
+        ? "income"
+        : "expense",
+
+    title:
+      title,
+
+    amount:
+      parseAmount(
+        amount,
+        currency
+      ),
+
+    currency:
+      currency,
+
+    category:
+      category,
+
+    date:
+      dateInput
+        ? dateInput.value
+        : "",
+
+    note:
+      noteInput
+        ? noteInput.value.trim()
+        : ""
+
+  };
+
+
+  // =========================================
+  // ADD + SAVE
+  // =========================================
+
+  transactions.push(
+    newTransaction
+  );
+
+  saveTransactions();
+
+  renderAll();
+
+
+  // =========================================
+  // RESET FORM
+  // =========================================
+
+  event.target.reset();
+
+}
+
+// =========================================
+// EDIT TRANSACTION
+// =========================================
+
+function handleEditClick(id) {
+
+  const transaction =
+    transactions.find(
+      (item) =>
+        item.id === id
+    );
+
+  if (!transaction) {
+    return;
+  }
+
+
+  const form =
+    $("expense-form");
+
+  const typeInput =
+    $("transactions-type");
+
+  const titleInput =
+    $("transaction-title");
+
+  const amountInput =
+    $("transaction-amount");
+
+  const currencyInput =
+    $("transaction-currency");
+
+  const categoryInput =
+    $("transaction-category");
+
+  const dateInput =
+    $("transaction-date");
+
+  const noteInput =
+    $("transaction-note");
+
+
+  if (
+    !form ||
+    !typeInput ||
+    !titleInput ||
+    !amountInput ||
+    !currencyInput ||
+    !categoryInput
+  ) {
+    return;
+  }
+
+
+  // =========================================
+  // LOAD TRANSACTION INTO FORM
+  // =========================================
+
+  currentEditingId =
+    transaction.id;
+
+
+  typeInput.value =
+    transaction.type === "income"
+      ? "income"
+      : "expenses";
+
+  titleInput.value =
+    transaction.title || "";
+
+  amountInput.value =
+    transaction.amount ?? "";
+
+  currencyInput.value =
+    transaction.currency ||
+    BASE_CURRENCY;
+
+  categoryInput.value =
+    transaction.category ||
+    CATEGORIES[0];
+
+  if (dateInput) {
+    dateInput.value =
+      transaction.date || "";
+  }
+
+  if (noteInput) {
+    noteInput.value =
+      transaction.note || "";
+  }
+
+
+  // =========================================
+  // CHANGE BUTTON TEXT
+  // =========================================
+
+  const submitButton =
+    form.querySelector(
+      'button[type="submit"]'
+    );
+
+  if (submitButton) {
+
+    submitButton.textContent =
+      "Update Transaction";
+
+  }
+
+
+  // =========================================
+  // SCROLL TO FORM
+  // =========================================
+
+  form.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
 
   // =========================================
   // DELETE TRANSACTION
@@ -945,8 +1161,31 @@ if (filteredTransactions.length === 0) {
 
 
       // -----------------------------------------
-      // Delete button
+      // Delete button & Edit button
       // -----------------------------------------
+
+      const editButton =
+  document.createElement("button");
+
+editButton.className =
+  "edit-btn";
+
+editButton.type =
+  "button";
+
+editButton.textContent =
+  "Edit";
+
+editButton.addEventListener(
+  "click",
+  () => {
+
+    handleEditClick(
+      transaction.id
+    );
+
+  }
+);
 
       const deleteButton =
         document.createElement("button");
@@ -993,8 +1232,12 @@ if (filteredTransactions.length === 0) {
 
       }
 
-      row.appendChild(
-        deleteButton
+     row.appendChild(
+      editButton
+      );
+
+     row.appendChild(
+      deleteButton
       );
 
 
