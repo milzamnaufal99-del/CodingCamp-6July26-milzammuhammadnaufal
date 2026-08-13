@@ -140,6 +140,7 @@ function parseAmount(value, currency) {
   let chartInstance = null;
   let currentFilter = "all";
   let searchQuery = "";
+  let currentSort = "latest";
 
   // =========================================
   // DOM HELPER
@@ -755,6 +756,52 @@ const filteredTransactions =
     return matchesFilter && matchesSearch;
   });
 
+  // =========================================
+// SORT TRANSACTIONS
+// =========================================
+
+filteredTransactions.sort((a, b) => {
+
+  // Sort by amount
+  if (
+    currentSort === "highest" ||
+    currentSort === "lowest"
+  ) {
+
+    const amountA =
+      convertToIDR(
+        Number(a.amount) || 0,
+        a.currency || BASE_CURRENCY
+      );
+
+    const amountB =
+      convertToIDR(
+        Number(b.amount) || 0,
+        b.currency || BASE_CURRENCY
+      );
+
+    return currentSort === "highest"
+      ? amountB - amountA
+      : amountA - amountB;
+  }
+
+
+  // Sort by date
+  const dateA =
+    a.date
+      ? new Date(a.date).getTime()
+      : 0;
+
+  const dateB =
+    b.date
+      ? new Date(b.date).getTime()
+      : 0;
+
+  return currentSort === "latest"
+    ? dateB - dateA
+    : dateA - dateB;
+});
+
 
 // =========================================
 // EMPTY STATE
@@ -1317,6 +1364,29 @@ if (searchInput) {
   );
 
 }
+
+// =========================================
+// TRANSACTION SORT
+// =========================================
+
+const sortSelect =
+  $("transaction-sort");
+
+if (sortSelect) {
+
+  sortSelect.addEventListener(
+    "change",
+    () => {
+
+      currentSort =
+        sortSelect.value;
+
+      renderList();
+    }
+  );
+
+}
+
     }
   );
 

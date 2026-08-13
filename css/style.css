@@ -438,3 +438,31 @@ flex-direction:column;
 #transaction-search::placeholder {
   color: #9ca3af;
 }
+
+/* =========================================
+   TRANSACTION SORT
+========================================= */
+
+#transaction-sort {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 15px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 0.95rem;
+  outline: none;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+#transaction-sort:focus {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
