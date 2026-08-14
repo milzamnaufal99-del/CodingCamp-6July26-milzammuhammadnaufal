@@ -922,6 +922,193 @@ function handleEditClick(id) {
 
 }
 
+// =========================================
+// MONTHLY SUMMARY
+// =========================================
+
+function renderMonthlySummary() {
+
+  const monthlyIncomeElement =
+    $("monthly-income");
+
+  const monthlyExpenseElement =
+    $("monthly-expense");
+
+  const monthlySavingsElement =
+    $("monthly-savings");
+
+  const monthlyExpenseRateElement =
+    $("monthly-expense-rate");
+
+  const monthlySummaryMonthElement =
+    $("monthly-summary-month");
+
+
+  // =========================================
+  // CURRENT MONTH
+  // =========================================
+
+  const now =
+    new Date();
+
+  const currentYear =
+    now.getFullYear();
+
+  const currentMonth =
+    now.getMonth();
+
+
+  const monthLabel =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        month: "long",
+        year: "numeric"
+      }
+    ).format(now);
+
+
+  if (monthlySummaryMonthElement) {
+
+    monthlySummaryMonthElement.textContent =
+      monthLabel;
+
+  }
+
+
+  // =========================================
+  // CALCULATE MONTHLY TOTALS
+  // =========================================
+
+  let monthlyIncome = 0;
+  let monthlyExpense = 0;
+
+
+  transactions.forEach(
+    (transaction) => {
+
+      if (!transaction.date) {
+        return;
+      }
+
+
+      const transactionDate =
+        new Date(
+          `${transaction.date}T00:00:00`
+        );
+
+
+      if (
+        transactionDate.getFullYear() !==
+          currentYear ||
+        transactionDate.getMonth() !==
+          currentMonth
+      ) {
+        return;
+      }
+
+
+      const amount =
+        Number(transaction.amount) || 0;
+
+      const currency =
+        transaction.currency ||
+        BASE_CURRENCY;
+
+
+      const amountInIDR =
+        convertToIDR(
+          amount,
+          currency
+        );
+
+
+      if (
+        transaction.type === "income"
+      ) {
+
+        monthlyIncome +=
+          amountInIDR;
+
+      } else {
+
+        monthlyExpense +=
+          amountInIDR;
+
+      }
+
+    }
+  );
+
+
+  // =========================================
+  // CALCULATE SAVINGS
+  // =========================================
+
+  const monthlySavings =
+    monthlyIncome -
+    monthlyExpense;
+
+
+  // =========================================
+  // CALCULATE EXPENSE RATE
+  // =========================================
+
+  const monthlyExpenseRate =
+    monthlyIncome > 0
+      ? (
+          monthlyExpense /
+          monthlyIncome
+        ) * 100
+      : 0;
+
+
+  // =========================================
+  // UPDATE UI
+  // =========================================
+
+  if (monthlyIncomeElement) {
+
+    monthlyIncomeElement.textContent =
+      formatCurrency(
+        monthlyIncome,
+        BASE_CURRENCY
+      );
+
+  }
+
+
+  if (monthlyExpenseElement) {
+
+    monthlyExpenseElement.textContent =
+      formatCurrency(
+        monthlyExpense,
+        BASE_CURRENCY
+      );
+
+  }
+
+
+  if (monthlySavingsElement) {
+
+    monthlySavingsElement.textContent =
+      formatCurrency(
+        monthlySavings,
+        BASE_CURRENCY
+      );
+
+  }
+
+
+  if (monthlyExpenseRateElement) {
+
+    monthlyExpenseRateElement.textContent =
+      `${monthlyExpenseRate.toFixed(1)}%`;
+
+  }
+
+}
+
   // =========================================
   // TRANSACTION LIST
   // =========================================
@@ -1505,6 +1692,8 @@ editButton.addEventListener(
   function renderAll() {
 
     renderBalance();
+
+    renderMonthlySummary();
 
     renderChart();
 

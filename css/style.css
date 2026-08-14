@@ -484,3 +484,74 @@ flex-direction:column;
 .edit-btn:hover {
   background: #1d4ed8;
 }
+
+/* =========================================
+   MONTHLY SUMMARY
+========================================= */
+
+.monthly-summary {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.monthly-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.monthly-summary-header h3 {
+  font-size: 1.1rem;
+  color: #1f2937;
+}
+
+.monthly-summary-header span {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.monthly-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.monthly-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.monthly-card h4 {
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.monthly-card p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+
+/* =========================================
+   MOBILE MONTHLY SUMMARY
+========================================= */
+
+@media (max-width: 600px) {
+
+  .monthly-summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .monthly-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
