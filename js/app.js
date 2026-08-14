@@ -765,6 +765,95 @@ function handleEditClick(id) {
     renderAll();
   }
 
+// =========================================
+// EXPORT TRANSACTIONS
+// =========================================
+
+function exportTransactionsToCSV() {
+
+  if (transactions.length === 0) {
+
+    showBanner(
+      "No transactions available to export.",
+      "warning"
+    );
+
+    return;
+  }
+
+
+  const headers = [
+    "Type",
+    "Title",
+    "Amount",
+    "Currency",
+    "Category",
+    "Date",
+    "Notes"
+  ];
+
+
+  const rows =
+    transactions.map(
+      (transaction) => [
+        transaction.type || "",
+        transaction.title || "",
+        transaction.amount ?? "",
+        transaction.currency || "",
+        transaction.category || "",
+        transaction.date || "",
+        transaction.note || ""
+      ]
+    );
+
+
+  const csvContent = [
+    headers,
+    ...rows
+  ]
+    .map(
+      (row) =>
+        row
+          .map(
+            (value) =>
+              `"${String(value)
+                .replace(/"/g, '""')}"`
+          )
+          .join(",")
+    )
+    .join("\n");
+
+
+  const blob =
+    new Blob(
+      [csvContent],
+      {
+        type: "text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+    "expense-transactions.csv";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+
+}
 
   // =========================================
   // RESET ALL DATA
@@ -1744,6 +1833,22 @@ editButton.addEventListener(
           handleResetData
         );
       }
+
+      // =========================================
+// EXPORT BUTTON
+// =========================================
+
+const exportButton =
+  $("export-data");
+
+if (exportButton) {
+
+  exportButton.addEventListener(
+    "click",
+    exportTransactionsToCSV
+  );
+
+}
       // =========================================
 // TRANSACTION FILTER
 // =========================================

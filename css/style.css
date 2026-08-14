@@ -555,3 +555,16 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   EXPORT BUTTON
+========================================= */
+
+#export-data {
+  background: #111827;
+  color: white;
+}
+
+#export-data:hover {
+  background: #374151;
+}
