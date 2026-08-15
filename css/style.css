@@ -568,3 +568,135 @@ flex-direction:column;
 #export-data:hover {
   background: #374151;
 }
+
+/* =========================================
+   BUDGET SETTINGS
+========================================= */
+
+.budget-settings {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.budget-settings-header {
+  margin-bottom: 18px;
+}
+
+.budget-settings-header h3 {
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.budget-settings-header span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.budget-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+.budget-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-form-group label {
+  margin-bottom: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.budget-form-group input,
+.budget-form-group select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.budget-form-group input:focus,
+.budget-form-group select:focus {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#save-budget {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#save-budget:hover {
+  background: #1d4ed8;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid #f0f1f3;
+}
+
+.budget-category {
+  flex: 1;
+  font-weight: 600;
+}
+
+.budget-amount {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.budget-delete {
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 6px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.budget-delete:hover {
+  background: #fecaca;
+}
+
+
+/* =========================================
+   MOBILE BUDGET
+========================================= */
+
+@media (max-width: 600px) {
+
+  .budget-form {
+    grid-template-columns: 1fr;
+  }
+
+  #save-budget {
+    width: 100%;
+  }
+
+  .budget-row {
+    flex-wrap: wrap;
+  }
+
+  .budget-category {
+    flex: 1 1 100%;
+  }
+
+}

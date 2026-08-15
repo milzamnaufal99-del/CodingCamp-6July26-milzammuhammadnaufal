@@ -69,6 +69,63 @@
 
 </div>
 
+<div class="budget-settings">
+
+  <div class="budget-settings-header">
+    <h3>Budget Settings</h3>
+    <span>Monthly budget per category</span>
+  </div>
+
+  <div class="budget-form">
+
+    <div class="budget-form-group">
+      <label for="budget-category">
+        Category
+      </label>
+
+      <select id="budget-category">
+        <option value="Food">Food</option>
+        <option value="Transport">Transport</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Bills">Bills</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Education">Education</option>
+        <option value="Health">Health</option>
+        <option value="Salary">Salary</option>
+        <option value="Freelance">Freelance</option>
+        <option value="Investment">Investment</option>
+      </select>
+    </div>
+
+    <div class="budget-form-group">
+      <label for="budget-amount">
+        Monthly Budget (IDR)
+      </label>
+
+      <input
+        type="text"
+        id="budget-amount"
+        placeholder="Contoh: 500.000"
+      />
+    </div>
+
+    <button
+      type="button"
+      id="save-budget"
+    >
+      Save Budget
+    </button>
+
+  </div>
+
+  <div id="budget-list">
+    <p id="budget-empty">
+      No budgets set yet.
+    </p>
+  </div>
+
+</div>
+
         <div class="summary-container">
 
         <div class="summary-card">

@@ -4,7 +4,11 @@
 // CONSTANTS
 // =========================================
 
-const STORAGE_KEY = "expense_visualizer_transactions";
+const STORAGE_KEY = 
+  "expense_visualizer_transactions";
+
+const BUDGET_STORAGE_KEY =
+  "expense_visualizer_budgets";
 
 const CATEGORIES = [
   "Food",
@@ -142,6 +146,7 @@ function parseAmount(value, currency) {
   let searchQuery = "";
   let currentSort = "latest";
   let currentEditingId = null;
+  let budgets = {};
 
   // =========================================
   // DOM HELPER
@@ -302,6 +307,253 @@ function parseAmount(value, currency) {
       );
     }
   }
+
+  // =========================================
+// BUDGET STORAGE
+// =========================================
+
+function loadBudgets() {
+
+  try {
+
+    const rawData =
+      localStorage.getItem(
+        BUDGET_STORAGE_KEY
+      );
+
+    if (!rawData) {
+      return {};
+    }
+
+    const parsedData =
+      JSON.parse(rawData);
+
+    if (
+      !parsedData ||
+      typeof parsedData !== "object" ||
+      Array.isArray(parsedData)
+    ) {
+      return {};
+    }
+
+    return parsedData;
+
+  } catch (error) {
+
+    showBanner(
+      "Could not load budget settings.",
+      "warning"
+    );
+
+    return {};
+  }
+}
+
+
+function saveBudgets() {
+
+  try {
+
+    localStorage.setItem(
+      BUDGET_STORAGE_KEY,
+      JSON.stringify(budgets)
+    );
+
+  } catch (error) {
+
+    showBanner(
+      "Unable to save budget settings.",
+      "error"
+    );
+
+  }
+
+}
+
+// =========================================
+// RENDER BUDGET SETTINGS
+// =========================================
+
+function renderBudgets() {
+
+  const budgetList =
+    $("budget-list");
+
+  if (!budgetList) {
+    return;
+  }
+
+  budgetList.innerHTML = "";
+
+
+  const budgetEntries =
+    Object.entries(budgets);
+
+
+  if (budgetEntries.length === 0) {
+
+    const emptyMessage =
+      document.createElement("p");
+
+    emptyMessage.id =
+      "budget-empty";
+
+    emptyMessage.textContent =
+      "No budgets set yet.";
+
+    budgetList.appendChild(
+      emptyMessage
+    );
+
+    return;
+  }
+
+
+  budgetEntries.forEach(
+    ([category, amount]) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "budget-row";
+
+
+      const name =
+        document.createElement("span");
+
+      name.className =
+        "budget-category";
+
+      name.textContent =
+        category;
+
+
+      const value =
+        document.createElement("span");
+
+      value.className =
+        "budget-amount";
+
+      value.textContent =
+        formatCurrency(
+          amount,
+          BASE_CURRENCY
+        );
+
+
+      const deleteButton =
+        document.createElement("button");
+
+      deleteButton.type =
+        "button";
+
+      deleteButton.className =
+        "budget-delete";
+
+      deleteButton.textContent =
+        "Remove";
+
+
+      deleteButton.addEventListener(
+        "click",
+        () => {
+
+          delete budgets[category];
+
+          saveBudgets();
+
+          renderBudgets();
+
+        }
+      );
+
+
+      row.appendChild(name);
+
+      row.appendChild(value);
+
+      row.appendChild(deleteButton);
+
+
+      budgetList.appendChild(row);
+
+    }
+  );
+
+}
+
+// =========================================
+// SAVE BUDGET
+// =========================================
+
+function handleSaveBudget() {
+
+  const categoryInput =
+    $("budget-category");
+
+  const amountInput =
+    $("budget-amount");
+
+  if (
+    !categoryInput ||
+    !amountInput
+  ) {
+    return;
+  }
+
+
+  const category =
+    categoryInput.value;
+
+  const rawAmount =
+    amountInput.value.trim();
+
+
+  if (!rawAmount) {
+
+    showBanner(
+      "Please enter a budget amount.",
+      "warning"
+    );
+
+    return;
+  }
+
+
+  const amount =
+    parseAmount(
+      rawAmount,
+      BASE_CURRENCY
+    );
+
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+
+    showBanner(
+      "Budget amount must be greater than 0.",
+      "warning"
+    );
+
+    return;
+  }
+
+
+  budgets[category] =
+    amount;
+
+
+  saveBudgets();
+
+  renderBudgets();
+
+
+  amountInput.value = "";
+
+}
 
 
   // =========================================
@@ -1802,6 +2054,9 @@ editButton.addEventListener(
       transactions =
         loadTransactions();
 
+        budgets =
+  loadBudgets();
+
 
       // Initial render
       renderAll();
@@ -1846,6 +2101,22 @@ if (exportButton) {
   exportButton.addEventListener(
     "click",
     exportTransactionsToCSV
+  );
+
+}
+
+// =========================================
+// BUDGET BUTTON
+// =========================================
+
+const saveBudgetButton =
+  $("save-budget");
+
+if (saveBudgetButton) {
+
+  saveBudgetButton.addEventListener(
+    "click",
+    handleSaveBudget
   );
 
 }
