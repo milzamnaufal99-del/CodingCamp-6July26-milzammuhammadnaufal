@@ -700,3 +700,128 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   BUDGET USAGE
+========================================= */
+
+.budget-row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto auto auto;
+  gap: 15px;
+  align-items: center;
+  padding: 15px 0;
+  border-top: 1px solid #f0f1f3;
+}
+
+.budget-category {
+  font-weight: 600;
+}
+
+.budget-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.8rem;
+}
+
+.budget-limit {
+  color: #374151;
+  font-weight: 600;
+}
+
+.budget-used {
+  color: #6b7280;
+}
+
+.budget-remaining {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.budget-remaining.over {
+  color: #b91c1c;
+}
+
+.budget-percentage {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.budget-percentage.over {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.budget-progress {
+  width: 120px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.budget-progress-bar {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.budget-progress-bar.over {
+  background: #ef4444;
+}
+
+.budget-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.budget-status.safe {
+  color: #15803d;
+}
+
+.budget-status.warning {
+  color: #d97706;
+}
+
+.budget-status.over {
+  color: #b91c1c;
+}
+
+
+/* =========================================
+   MOBILE BUDGET USAGE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .budget-row {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+
+  .budget-category {
+    grid-column: 1 / -1;
+  }
+
+  .budget-info {
+    grid-column: 1;
+  }
+
+  .budget-progress {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .budget-status {
+    grid-column: 1;
+  }
+
+  .budget-delete {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+}

@@ -371,7 +371,7 @@ function saveBudgets() {
 }
 
 // =========================================
-// RENDER BUDGET SETTINGS
+// RENDER BUDGET + MONTHLY USAGE
 // =========================================
 
 function renderBudgets() {
@@ -389,6 +389,10 @@ function renderBudgets() {
   const budgetEntries =
     Object.entries(budgets);
 
+
+  // =========================================
+  // EMPTY STATE
+  // =========================================
 
   if (budgetEntries.length === 0) {
 
@@ -409,8 +413,127 @@ function renderBudgets() {
   }
 
 
+  // =========================================
+  // CURRENT MONTH
+  // =========================================
+
+  const now =
+    new Date();
+
+  const currentYear =
+    now.getFullYear();
+
+  const currentMonth =
+    now.getMonth();
+
+
+  // =========================================
+  // CALCULATE EXPENSE BY CATEGORY
+  // =========================================
+
+  const monthlyExpenses = {};
+
+
+  transactions.forEach(
+    (transaction) => {
+
+      // Only expenses
+      if (
+        transaction.type === "income"
+      ) {
+        return;
+      }
+
+
+      // Ignore transactions without date
+      if (!transaction.date) {
+        return;
+      }
+
+
+      const transactionDate =
+        new Date(
+          `${transaction.date}T00:00:00`
+        );
+
+
+      // Only current month
+      if (
+        transactionDate.getFullYear() !==
+          currentYear ||
+        transactionDate.getMonth() !==
+          currentMonth
+      ) {
+        return;
+      }
+
+
+      const category =
+        transaction.category;
+
+
+      const amount =
+        Number(transaction.amount) || 0;
+
+
+      const currency =
+        transaction.currency ||
+        BASE_CURRENCY;
+
+
+      const amountInIDR =
+        convertToIDR(
+          amount,
+          currency
+        );
+
+
+      if (
+        monthlyExpenses[category] ===
+        undefined
+      ) {
+
+        monthlyExpenses[category] =
+          0;
+
+      }
+
+
+      monthlyExpenses[category] +=
+        amountInIDR;
+
+    }
+  );
+
+
+  // =========================================
+  // RENDER EACH BUDGET
+  // =========================================
+
   budgetEntries.forEach(
-    ([category, amount]) => {
+    ([category, budgetAmount]) => {
+
+      const used =
+        monthlyExpenses[category] || 0;
+
+
+      const remaining =
+        budgetAmount - used;
+
+
+      const percentage =
+        budgetAmount > 0
+          ? (used / budgetAmount) * 100
+          : 0;
+
+
+      const isOverBudget =
+        used > budgetAmount;
+
+
+      // ---------------------------------------
+      // ROW
+      // ---------------------------------------
 
       const row =
         document.createElement("div");
@@ -419,8 +542,12 @@ function renderBudgets() {
         "budget-row";
 
 
+      // ---------------------------------------
+      // CATEGORY
+      // ---------------------------------------
+
       const name =
-        document.createElement("span");
+        document.createElement("div");
 
       name.className =
         "budget-category";
@@ -429,18 +556,168 @@ function renderBudgets() {
         category;
 
 
-      const value =
+      // ---------------------------------------
+      // BUDGET INFO
+      // ---------------------------------------
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "budget-info";
+
+
+      const budgetText =
         document.createElement("span");
 
-      value.className =
-        "budget-amount";
+      budgetText.className =
+        "budget-limit";
 
-      value.textContent =
-        formatCurrency(
-          amount,
-          BASE_CURRENCY
+      budgetText.textContent =
+        `Budget: ${
+          formatCurrency(
+            budgetAmount,
+            BASE_CURRENCY
+          )
+        }`;
+
+
+      const usedText =
+        document.createElement("span");
+
+      usedText.className =
+        "budget-used";
+
+      usedText.textContent =
+        `Used: ${
+          formatCurrency(
+            used,
+            BASE_CURRENCY
+          )
+        }`;
+
+
+      const remainingText =
+        document.createElement("span");
+
+      remainingText.className =
+        isOverBudget
+          ? "budget-remaining over"
+          : "budget-remaining";
+
+      remainingText.textContent =
+        isOverBudget
+          ? `Over: ${formatCurrency(
+              Math.abs(remaining),
+              BASE_CURRENCY
+            )}`
+          : `Remaining: ${formatCurrency(
+              remaining,
+              BASE_CURRENCY
+            )}`;
+
+
+      const percentageText =
+        document.createElement("span");
+
+      percentageText.className =
+        isOverBudget
+          ? "budget-percentage over"
+          : "budget-percentage";
+
+      percentageText.textContent =
+        `${percentage.toFixed(1)}% used`;
+
+
+      info.appendChild(
+        budgetText
+      );
+
+      info.appendChild(
+        usedText
+      );
+
+      info.appendChild(
+        remainingText
+      );
+
+      info.appendChild(
+        percentageText
+      );
+
+
+      // ---------------------------------------
+      // PROGRESS BAR
+      // ---------------------------------------
+
+      const progressContainer =
+        document.createElement("div");
+
+      progressContainer.className =
+        "budget-progress";
+
+
+      const progressBar =
+        document.createElement("div");
+
+      progressBar.className =
+        isOverBudget
+          ? "budget-progress-bar over"
+          : "budget-progress-bar";
+
+
+      const progressWidth =
+        Math.min(
+          percentage,
+          100
         );
 
+
+      progressBar.style.width =
+        `${progressWidth}%`;
+
+
+      progressContainer.appendChild(
+        progressBar
+      );
+
+
+      // ---------------------------------------
+      // STATUS
+      // ---------------------------------------
+
+      const status =
+        document.createElement("span");
+
+      status.className =
+        isOverBudget
+          ? "budget-status over"
+          : percentage >= 80
+            ? "budget-status warning"
+            : "budget-status safe";
+
+
+      if (isOverBudget) {
+
+        status.textContent =
+          "Over Budget";
+
+      } else if (percentage >= 80) {
+
+        status.textContent =
+          "Almost Limit";
+
+      } else {
+
+        status.textContent =
+          "On Track";
+
+      }
+
+
+      // ---------------------------------------
+      // REMOVE BUTTON
+      // ---------------------------------------
 
       const deleteButton =
         document.createElement("button");
@@ -469,20 +746,33 @@ function renderBudgets() {
       );
 
 
+      // ---------------------------------------
+      // APPEND
+      // ---------------------------------------
+
       row.appendChild(name);
 
-      row.appendChild(value);
+      row.appendChild(info);
 
-      row.appendChild(deleteButton);
+      row.appendChild(
+        progressContainer
+      );
+
+      row.appendChild(status);
+
+      row.appendChild(
+        deleteButton
+      );
 
 
-      budgetList.appendChild(row);
+      budgetList.appendChild(
+        row
+      );
 
     }
   );
 
 }
-
 // =========================================
 // SAVE BUDGET
 // =========================================
@@ -2032,14 +2322,17 @@ editButton.addEventListener(
 
   function renderAll() {
 
-    renderBalance();
+  renderBalance();
 
-    renderMonthlySummary();
+  renderMonthlySummary();
 
-    renderChart();
+  renderBudgets();
 
-    renderList();
-  }
+  renderChart();
+
+  renderList();
+
+}
 
 
   // =========================================
