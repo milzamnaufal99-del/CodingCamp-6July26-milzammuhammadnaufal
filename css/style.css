@@ -825,3 +825,76 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   BUDGET HEALTH
+========================================= */
+
+.budget-health {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.budget-health-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.budget-health-header h3 {
+  font-size: 1.1rem;
+  color: #1f2937;
+}
+
+.budget-health-header span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.budget-health-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 12px;
+}
+
+.health-card {
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.health-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.health-card strong {
+  font-size: 1.6rem;
+  color: #2563eb;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .budget-health-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-health-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+}
