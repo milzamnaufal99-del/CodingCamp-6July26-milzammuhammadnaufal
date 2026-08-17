@@ -1577,6 +1577,275 @@ function exportTransactionsToCSV() {
 
 }
 
+// =========================================
+// IMPORT TRANSACTIONS
+// =========================================
+
+function importTransactionsFromCSV(file) {
+
+  if (!file) {
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    (event) => {
+
+      try {
+
+        const csvText =
+          event.target.result;
+
+
+        const lines =
+          csvText
+            .split(/\r?\n/)
+            .filter(
+              (line) =>
+                line.trim() !== ""
+            );
+
+
+        if (lines.length < 2) {
+
+          showBanner(
+            "CSV file contains no transaction data.",
+            "warning"
+          );
+
+          return;
+        }
+
+
+        const importedTransactions =
+          lines
+            .slice(1)
+            .map(
+              (line) =>
+                parseCSVLine(line)
+            )
+            .filter(
+              (row) =>
+                row.length >= 7
+            );
+
+
+        if (
+          importedTransactions.length === 0
+        ) {
+
+          showBanner(
+            "No valid transactions found in CSV.",
+            "warning"
+          );
+
+          return;
+        }
+
+
+        importedTransactions.forEach(
+          (row) => {
+
+            const [
+              type,
+              title,
+              amount,
+              currency,
+              category,
+              date,
+              note
+            ] = row;
+
+
+            const numericAmount =
+              parseAmount(
+                amount,
+                currency || BASE_CURRENCY
+              );
+
+
+            if (
+              !Number.isFinite(
+                numericAmount
+              ) ||
+              numericAmount <= 0
+            ) {
+              return;
+            }
+
+
+            let id;
+
+            if (
+              typeof crypto !== "undefined" &&
+              crypto.randomUUID
+            ) {
+
+              id =
+                crypto.randomUUID();
+
+            } else {
+
+              id =
+                Date.now().toString() +
+                Math.random()
+                  .toString(36)
+                  .slice(2);
+
+            }
+
+
+            transactions.push({
+
+              id: id,
+
+              type:
+                type === "income"
+                  ? "income"
+                  : "expense",
+
+              title:
+                title || "Imported Transaction",
+
+              amount:
+                numericAmount,
+
+              currency:
+                currency || BASE_CURRENCY,
+
+              category:
+                CATEGORIES.includes(
+                  category
+                )
+                  ? category
+                  : CATEGORIES[0],
+
+              date:
+                date || "",
+
+              note:
+                note || ""
+
+            });
+
+          }
+        );
+
+
+        saveTransactions();
+
+        renderAll();
+
+
+        showBanner(
+          "Transactions imported successfully.",
+          "warning"
+        );
+
+
+      } catch (error) {
+
+        showBanner(
+          "Failed to import CSV file.",
+          "error"
+        );
+
+      }
+
+    };
+
+
+  reader.onerror =
+    () => {
+
+      showBanner(
+        "Could not read the CSV file.",
+        "error"
+      );
+
+    };
+
+
+  reader.readAsText(file);
+
+}
+
+// =========================================
+// PARSE CSV LINE
+// =========================================
+
+function parseCSVLine(line) {
+
+  const values = [];
+
+  let current = "";
+
+  let insideQuotes = false;
+
+
+  for (
+    let i = 0;
+    i < line.length;
+    i++
+  ) {
+
+    const char =
+      line[i];
+
+
+    if (
+      char === '"'
+    ) {
+
+      if (
+        insideQuotes &&
+        line[i + 1] === '"'
+      ) {
+
+        current += '"';
+
+        i++;
+
+      } else {
+
+        insideQuotes =
+          !insideQuotes;
+
+      }
+
+    } else if (
+      char === "," &&
+      !insideQuotes
+    ) {
+
+      values.push(
+        current
+      );
+
+      current = "";
+
+    } else {
+
+      current += char;
+
+    }
+
+  }
+
+
+  values.push(
+    current
+  );
+
+
+  return values;
+
+}
+
   // =========================================
   // RESET ALL DATA
   // =========================================
@@ -2564,7 +2833,7 @@ editButton.addEventListener(
         );
       }
 
-      // =========================================
+// =========================================
 // EXPORT BUTTON
 // =========================================
 
@@ -2576,6 +2845,56 @@ if (exportButton) {
   exportButton.addEventListener(
     "click",
     exportTransactionsToCSV
+  );
+
+}
+
+// =========================================
+// IMPORT BUTTON
+// =========================================
+
+const importButton =
+  $("import-data");
+
+const importFile =
+  $("import-file");
+
+
+if (
+  importButton &&
+  importFile
+) {
+
+  importButton.addEventListener(
+    "click",
+    () => {
+
+      importFile.click();
+
+    }
+  );
+
+
+  importFile.addEventListener(
+    "change",
+    () => {
+
+      const file =
+        importFile.files[0];
+
+      if (file) {
+
+        importTransactionsFromCSV(
+          file
+        );
+
+      }
+
+
+      importFile.value =
+        "";
+
+    }
   );
 
 }

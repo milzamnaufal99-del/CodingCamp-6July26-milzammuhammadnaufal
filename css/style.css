@@ -898,3 +898,16 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   IMPORT BUTTON
+========================================= */
+
+#import-data {
+  background: #059669;
+  color: white;
+}
+
+#import-data:hover {
+  background: #047857;
+}
