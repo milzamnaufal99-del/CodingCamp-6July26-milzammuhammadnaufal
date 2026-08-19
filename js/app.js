@@ -8,7 +8,7 @@ const STORAGE_KEY =
   "expense_visualizer_transactions";
 
 const BUDGET_STORAGE_KEY =
-  "expense_visualizer_budgets";
+  "expense_visualizer_exchange_rates";
 
 const CATEGORIES = [
   "Food",
@@ -25,7 +25,7 @@ const CATEGORIES = [
 
 const BASE_CURRENCY = "IDR";
 
-const EXCHANGE_RATES = {
+let EXCHANGE_RATES = {
   IDR: 1,
   JPY: 110,
   USD: 17000
@@ -367,6 +367,201 @@ function saveBudgets() {
     );
 
   }
+
+}
+
+// =========================================
+// EXCHANGE RATE STORAGE
+// =========================================
+
+function loadExchangeRates() {
+
+  try {
+
+    const rawData =
+      localStorage.getItem(
+        RATES_STORAGE_KEY
+      );
+
+
+    if (!rawData) {
+
+      return {
+        IDR: 1,
+        JPY: 110,
+        USD: 17000
+      };
+
+    }
+
+
+    const parsedData =
+      JSON.parse(rawData);
+
+
+    return {
+      IDR: 1,
+
+      JPY:
+        Number(parsedData.JPY) > 0
+          ? Number(parsedData.JPY)
+          : 110,
+
+      USD:
+        Number(parsedData.USD) > 0
+          ? Number(parsedData.USD)
+          : 17000
+    };
+
+
+  } catch (error) {
+
+    showBanner(
+      "Could not load exchange rates.",
+      "warning"
+    );
+
+
+    return {
+      IDR: 1,
+      JPY: 110,
+      USD: 17000
+    };
+
+  }
+
+}
+
+function saveExchangeRates() {
+
+  try {
+
+    localStorage.setItem(
+      RATES_STORAGE_KEY,
+      JSON.stringify(
+        EXCHANGE_RATES
+      )
+    );
+
+  } catch (error) {
+
+    showBanner(
+      "Unable to save exchange rates.",
+      "error"
+    );
+
+  }
+
+}
+
+// =========================================
+// RENDER EXCHANGE RATES
+// =========================================
+
+function renderExchangeRates() {
+
+  const jpyInput =
+    $("rate-jpy");
+
+  const usdInput =
+    $("rate-usd");
+
+
+  if (!jpyInput || !usdInput) {
+    return;
+  }
+
+
+  jpyInput.value =
+    EXCHANGE_RATES.JPY;
+
+
+  usdInput.value =
+    EXCHANGE_RATES.USD;
+
+}
+
+// =========================================
+// SAVE EXCHANGE RATES
+// =========================================
+
+function handleSaveExchangeRates() {
+
+  const jpyInput =
+    $("rate-jpy");
+
+  const usdInput =
+    $("rate-usd");
+
+
+  if (!jpyInput || !usdInput) {
+    return;
+  }
+
+
+  const jpyRate =
+    Number(
+      String(
+        jpyInput.value
+      ).replace(/[.,]/g, "")
+    );
+
+
+  const usdRate =
+    Number(
+      String(
+        usdInput.value
+      ).replace(/[.,]/g, "")
+    );
+
+
+  if (
+    !Number.isFinite(jpyRate) ||
+    jpyRate <= 0
+  ) {
+
+    showBanner(
+      "JPY exchange rate must be greater than 0.",
+      "warning"
+    );
+
+    return;
+  }
+
+
+  if (
+    !Number.isFinite(usdRate) ||
+    usdRate <= 0
+  ) {
+
+    showBanner(
+      "USD exchange rate must be greater than 0.",
+      "warning"
+    );
+
+    return;
+  }
+
+
+  EXCHANGE_RATES =
+    {
+      IDR: 1,
+      JPY: jpyRate,
+      USD: usdRate
+    };
+
+
+  saveExchangeRates();
+
+
+  // Refresh every currency-based calculation
+  renderAll();
+
+
+  showBanner(
+    "Exchange rates updated successfully.",
+    "warning"
+  );
 
 }
 
@@ -2923,13 +3118,16 @@ editButton.addEventListener(
       transactions =
         loadTransactions();
 
-        budgets =
-  loadBudgets();
+      budgets =
+        loadBudgets();
 
+      EXCHANGE_RATES =
+        loadExchangeRates();
 
       // Initial render
       renderAll();
-
+      
+      renderExchangeRates();
 
       // Form submit
       const form =
@@ -3020,6 +3218,22 @@ if (
         "";
 
     }
+  );
+
+}
+
+// =========================================
+// EXCHANGE RATE BUTTON
+// =========================================
+
+const saveRatesButton =
+  $("save-rates");
+
+if (saveRatesButton) {
+
+  saveRatesButton.addEventListener(
+    "click",
+    handleSaveExchangeRates
   );
 
 }

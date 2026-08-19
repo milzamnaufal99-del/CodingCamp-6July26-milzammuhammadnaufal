@@ -946,3 +946,92 @@ flex-direction:column;
 .budget-edit:hover {
   background: #1d4ed8;
 }
+
+/* =========================================
+   EXCHANGE RATE SETTINGS
+========================================= */
+
+.exchange-settings {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.exchange-settings-header {
+  margin-bottom: 18px;
+}
+
+.exchange-settings-header h3 {
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.exchange-settings-header span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.exchange-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.exchange-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.exchange-form-group label {
+  margin-bottom: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.exchange-form-group input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.exchange-form-group input:focus {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#save-rates {
+  border: none;
+  background: #059669;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#save-rates:hover {
+  background: #047857;
+}
+
+
+/* =========================================
+   MOBILE EXCHANGE RATE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .exchange-form {
+    grid-template-columns: 1fr;
+  }
+
+  #save-rates {
+    width: 100%;
+  }
+
+}
