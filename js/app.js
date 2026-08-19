@@ -711,9 +711,56 @@ function renderBudgets() {
 
 
       // ---------------------------------------
-      // REMOVE BUTTON
+      // REMOVE & EDIT BUTTON
       // ---------------------------------------
 
+      const editButton =
+  document.createElement("button");
+
+editButton.type =
+  "button";
+
+editButton.className =
+  "budget-edit";
+
+editButton.textContent =
+  "Edit";
+
+
+editButton.addEventListener(
+  "click",
+  () => {
+
+    const categoryInput =
+      $("budget-category");
+
+    const amountInput =
+      $("budget-amount");
+
+
+    if (
+      !categoryInput ||
+      !amountInput
+    ) {
+      return;
+    }
+
+
+    categoryInput.value =
+      category;
+
+    amountInput.value =
+      budgetAmount
+        .toLocaleString(
+          "id-ID"
+        );
+
+
+    amountInput.focus();
+
+  }
+);
+      
       const deleteButton =
         document.createElement("button");
 
@@ -761,6 +808,10 @@ function renderBudgets() {
 
       row.appendChild(
         status
+      );
+
+      row.appendChild(
+        editButton
       );
 
       row.appendChild(
