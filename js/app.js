@@ -8,6 +8,9 @@ const STORAGE_KEY =
   "expense_visualizer_transactions";
 
 const BUDGET_STORAGE_KEY =
+  "expense_visualizer_budgets";
+
+const RATES_STORAGE_KEY =
   "expense_visualizer_exchange_rates";
 
 const CATEGORIES = [
@@ -316,27 +319,76 @@ function loadBudgets() {
 
   try {
 
-    const rawData =
+    const correctKey =
       localStorage.getItem(
         BUDGET_STORAGE_KEY
       );
 
-    if (!rawData) {
-      return {};
+    // -----------------------------------------
+    // NORMAL BUDGET STORAGE
+    // -----------------------------------------
+
+    if (correctKey) {
+
+      const parsedData =
+        JSON.parse(correctKey);
+
+      if (
+        parsedData &&
+        typeof parsedData === "object" &&
+        !Array.isArray(parsedData)
+      ) {
+
+        return parsedData;
+
+      }
+
     }
 
-    const parsedData =
-      JSON.parse(rawData);
 
-    if (
-      !parsedData ||
-      typeof parsedData !== "object" ||
-      Array.isArray(parsedData)
-    ) {
-      return {};
+    // -----------------------------------------
+    // MIGRATE OLD BUGGED STORAGE
+    // -----------------------------------------
+
+    const oldKey =
+      localStorage.getItem(
+        "expense_visualizer_exchange_rates"
+      );
+
+
+    if (oldKey) {
+
+      const parsedOldData =
+        JSON.parse(oldKey);
+
+
+      const looksLikeBudgetData =
+        parsedOldData &&
+        typeof parsedOldData === "object" &&
+        !Array.isArray(parsedOldData) &&
+        Object.keys(parsedOldData).some(
+          (key) =>
+            CATEGORIES.includes(key)
+        );
+
+
+      if (looksLikeBudgetData) {
+
+        localStorage.setItem(
+          BUDGET_STORAGE_KEY,
+          JSON.stringify(
+            parsedOldData
+          )
+        );
+
+        return parsedOldData;
+
+      }
+
     }
 
-    return parsedData;
+
+    return {};
 
   } catch (error) {
 
@@ -346,25 +398,6 @@ function loadBudgets() {
     );
 
     return {};
-  }
-}
-
-
-function saveBudgets() {
-
-  try {
-
-    localStorage.setItem(
-      BUDGET_STORAGE_KEY,
-      JSON.stringify(budgets)
-    );
-
-  } catch (error) {
-
-    showBanner(
-      "Unable to save budget settings.",
-      "error"
-    );
 
   }
 
