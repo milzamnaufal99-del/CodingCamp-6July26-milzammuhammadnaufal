@@ -389,186 +389,6 @@ function renderBudgets() {
   const budgetEntries =
     Object.entries(budgets);
 
-// =========================================
-// BUDGET HEALTH
-// =========================================
-
-function renderBudgetHealth() {
-
-  const safeElement =
-    $("budget-safe-count");
-
-  const warningElement =
-    $("budget-warning-count");
-
-  const overElement =
-    $("budget-over-count");
-
-  const monthElement =
-    $("budget-health-month");
-
-
-  if (
-    !safeElement ||
-    !warningElement ||
-    !overElement
-  ) {
-    return;
-  }
-
-
-  const now =
-    new Date();
-
-  const currentYear =
-    now.getFullYear();
-
-  const currentMonth =
-    now.getMonth();
-
-
-  const monthLabel =
-    new Intl.DateTimeFormat(
-      "en-US",
-      {
-        month: "long",
-        year: "numeric"
-      }
-    ).format(now);
-
-
-  if (monthElement) {
-    monthElement.textContent =
-      monthLabel;
-  }
-
-
-  // =========================================
-  // CALCULATE EXPENSE PER CATEGORY
-  // =========================================
-
-  const monthlyExpenses = {};
-
-  transactions.forEach(
-    (transaction) => {
-
-      if (
-        transaction.type === "income"
-      ) {
-        return;
-      }
-
-      if (!transaction.date) {
-        return;
-      }
-
-
-      const date =
-        new Date(
-          `${transaction.date}T00:00:00`
-        );
-
-
-      if (
-        date.getFullYear() !==
-          currentYear ||
-        date.getMonth() !==
-          currentMonth
-      ) {
-        return;
-      }
-
-
-      const amount =
-        Number(transaction.amount) || 0;
-
-      const currency =
-        transaction.currency ||
-        BASE_CURRENCY;
-
-
-      const amountInIDR =
-        convertToIDR(
-          amount,
-          currency
-        );
-
-
-      const category =
-        transaction.category;
-
-
-      if (
-        monthlyExpenses[category] ===
-        undefined
-      ) {
-
-        monthlyExpenses[category] =
-          0;
-      }
-
-
-      monthlyExpenses[category] +=
-        amountInIDR;
-
-    }
-  );
-
-
-  // =========================================
-  // CALCULATE HEALTH STATUS
-  // =========================================
-
-  let safeCount = 0;
-  let warningCount = 0;
-  let overCount = 0;
-
-
-  Object.entries(budgets).forEach(
-    ([category, budget]) => {
-
-      const used =
-        monthlyExpenses[category] || 0;
-
-
-      const percentage =
-        budget > 0
-          ? (used / budget) * 100
-          : 0;
-
-
-      if (used > budget) {
-
-        overCount++;
-
-      } else if (percentage >= 80) {
-
-        warningCount++;
-
-      } else {
-
-        safeCount++;
-
-      }
-
-    }
-  );
-
-
-  // =========================================
-  // UPDATE DASHBOARD
-  // =========================================
-
-  safeElement.textContent =
-    safeCount;
-
-  warningElement.textContent =
-    warningCount;
-
-  overElement.textContent =
-    overCount;
-
-}
 
   // =========================================
   // EMPTY STATE
@@ -617,7 +437,6 @@ function renderBudgetHealth() {
   transactions.forEach(
     (transaction) => {
 
-      // Only expenses
       if (
         transaction.type === "income"
       ) {
@@ -625,7 +444,6 @@ function renderBudgetHealth() {
       }
 
 
-      // Ignore transactions without date
       if (!transaction.date) {
         return;
       }
@@ -637,7 +455,6 @@ function renderBudgetHealth() {
         );
 
 
-      // Only current month
       if (
         transactionDate.getFullYear() !==
           currentYear ||
@@ -651,10 +468,8 @@ function renderBudgetHealth() {
       const category =
         transaction.category;
 
-
       const amount =
         Number(transaction.amount) || 0;
-
 
       const currency =
         transaction.currency ||
@@ -922,6 +737,8 @@ function renderBudgetHealth() {
 
           renderBudgets();
 
+          renderBudgetHealth();
+
         }
       );
 
@@ -930,15 +747,21 @@ function renderBudgetHealth() {
       // APPEND
       // ---------------------------------------
 
-      row.appendChild(name);
+      row.appendChild(
+        name
+      );
 
-      row.appendChild(info);
+      row.appendChild(
+        info
+      );
 
       row.appendChild(
         progressContainer
       );
 
-      row.appendChild(status);
+      row.appendChild(
+        status
+      );
 
       row.appendChild(
         deleteButton
@@ -951,6 +774,195 @@ function renderBudgetHealth() {
 
     }
   );
+
+}
+
+
+// =========================================
+// BUDGET HEALTH
+// =========================================
+
+function renderBudgetHealth() {
+
+  const safeElement =
+    $("budget-safe-count");
+
+  const warningElement =
+    $("budget-warning-count");
+
+  const overElement =
+    $("budget-over-count");
+
+  const monthElement =
+    $("budget-health-month");
+
+
+  if (
+    !safeElement ||
+    !warningElement ||
+    !overElement
+  ) {
+    return;
+  }
+
+
+  const now =
+    new Date();
+
+  const currentYear =
+    now.getFullYear();
+
+  const currentMonth =
+    now.getMonth();
+
+
+  const monthLabel =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        month: "long",
+        year: "numeric"
+      }
+    ).format(now);
+
+
+  if (monthElement) {
+
+    monthElement.textContent =
+      monthLabel;
+
+  }
+
+
+  // =========================================
+  // CALCULATE EXPENSE PER CATEGORY
+  // =========================================
+
+  const monthlyExpenses = {};
+
+
+  transactions.forEach(
+    (transaction) => {
+
+      if (
+        transaction.type === "income"
+      ) {
+        return;
+      }
+
+
+      if (!transaction.date) {
+        return;
+      }
+
+
+      const date =
+        new Date(
+          `${transaction.date}T00:00:00`
+        );
+
+
+      if (
+        date.getFullYear() !==
+          currentYear ||
+        date.getMonth() !==
+          currentMonth
+      ) {
+        return;
+      }
+
+
+      const amount =
+        Number(transaction.amount) || 0;
+
+      const currency =
+        transaction.currency ||
+        BASE_CURRENCY;
+
+
+      const amountInIDR =
+        convertToIDR(
+          amount,
+          currency
+        );
+
+
+      const category =
+        transaction.category;
+
+
+      if (
+        monthlyExpenses[category] ===
+        undefined
+      ) {
+
+        monthlyExpenses[category] =
+          0;
+
+      }
+
+
+      monthlyExpenses[category] +=
+        amountInIDR;
+
+    }
+  );
+
+
+  // =========================================
+  // CALCULATE HEALTH STATUS
+  // =========================================
+
+  let safeCount = 0;
+
+  let warningCount = 0;
+
+  let overCount = 0;
+
+
+  Object.entries(budgets).forEach(
+    ([category, budget]) => {
+
+      const used =
+        monthlyExpenses[category] || 0;
+
+
+      const percentage =
+        budget > 0
+          ? (used / budget) * 100
+          : 0;
+
+
+      if (used > budget) {
+
+        overCount++;
+
+      } else if (percentage >= 80) {
+
+        warningCount++;
+
+      } else {
+
+        safeCount++;
+
+      }
+
+    }
+  );
+
+
+  // =========================================
+  // UPDATE DASHBOARD
+  // =========================================
+
+  safeElement.textContent =
+    safeCount;
+
+  warningElement.textContent =
+    warningCount;
+
+  overElement.textContent =
+    overCount;
 
 }
 // =========================================
