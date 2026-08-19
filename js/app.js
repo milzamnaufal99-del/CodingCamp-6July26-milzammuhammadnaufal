@@ -1261,6 +1261,13 @@ function handleSaveBudget() {
           "Save Transaction";
       }
 
+       const cancelButton =
+  $("cancel-edit");
+
+if (cancelButton) {
+  cancelButton.hidden = true;
+}
+
       return;
     }
 
@@ -1457,6 +1464,12 @@ function handleEditClick(id) {
 
   }
 
+  const cancelButton =
+  $("cancel-edit");
+
+if (cancelButton) {
+  cancelButton.hidden = false;
+}
 
   // =========================================
   // SCROLL TO FORM
@@ -1466,6 +1479,55 @@ function handleEditClick(id) {
     behavior: "smooth",
     block: "start"
   });
+
+}
+
+// =========================================
+// CANCEL EDIT
+// =========================================
+
+function handleCancelEdit() {
+
+  const form =
+    $("expense-form");
+
+  const cancelButton =
+    $("cancel-edit");
+
+  const submitButton =
+    form
+      ? form.querySelector(
+          'button[type="submit"]'
+        )
+      : null;
+
+
+  currentEditingId =
+    null;
+
+
+  if (form) {
+    form.reset();
+  }
+
+
+  if (submitButton) {
+
+    submitButton.textContent =
+      "Save Transaction";
+
+  }
+
+
+  if (cancelButton) {
+
+    cancelButton.hidden =
+      true;
+
+  }
+
+
+  clearErrorMessages();
 
 }
 
@@ -2895,6 +2957,22 @@ if (
         "";
 
     }
+  );
+
+}
+
+// =========================================
+// CANCEL EDIT BUTTON
+// =========================================
+
+const cancelEditButton =
+  $("cancel-edit");
+
+if (cancelEditButton) {
+
+  cancelEditButton.addEventListener(
+    "click",
+    handleCancelEdit
   );
 
 }

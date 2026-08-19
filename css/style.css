@@ -911,3 +911,20 @@ flex-direction:column;
 #import-data:hover {
   background: #047857;
 }
+
+/* =========================================
+   CANCEL EDIT
+========================================= */
+
+#cancel-edit {
+  background: #6b7280;
+  color: white;
+}
+
+#cancel-edit:hover {
+  background: #4b5563;
+}
+
+#cancel-edit[hidden] {
+  display: none;
+}
