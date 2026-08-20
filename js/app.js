@@ -327,6 +327,30 @@ function loadBudgets() {
         BUDGET_STORAGE_KEY
       );
 
+// =========================================
+// SAVE BUDGETS
+// =========================================
+
+function saveBudgets() {
+
+  try {
+
+    localStorage.setItem(
+      BUDGET_STORAGE_KEY,
+      JSON.stringify(budgets)
+    );
+
+  } catch (error) {
+
+    showBanner(
+      "Unable to save budget settings.",
+      "error"
+    );
+
+  }
+
+}
+
     // -----------------------------------------
     // NORMAL BUDGET STORAGE
     // -----------------------------------------
