@@ -1035,3 +1035,276 @@ flex-direction:column;
   }
 
 }
+
+/* =========================================
+   HEADER TOP
+========================================= */
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-toggle {
+  border: 1px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.12);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,.2);
+}
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-mode {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+
+/* HEADER */
+
+body.dark-mode .header {
+  background: #1e3a8a;
+}
+
+
+/* ALL SECTIONS */
+
+body.dark-mode section {
+  background: #1f2937;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+
+/* HEADINGS */
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4 {
+  color: #f9fafb;
+}
+
+
+/* SUMMARY */
+
+body.dark-mode .summary-card {
+  background: #111827;
+  border-color: #374151;
+}
+
+body.dark-mode .summary-card h3 {
+  color: #9ca3af;
+}
+
+body.dark-mode .summary-card p {
+  color: #60a5fa;
+}
+
+
+/* MONTHLY SUMMARY */
+
+body.dark-mode .monthly-summary {
+  border-top-color: #374151;
+}
+
+body.dark-mode .monthly-summary-header span {
+  color: #9ca3af;
+}
+
+body.dark-mode .monthly-card {
+  background: #111827;
+  border-color: #374151;
+}
+
+body.dark-mode .monthly-card h4 {
+  color: #9ca3af;
+}
+
+body.dark-mode .monthly-card p {
+  color: #60a5fa;
+}
+
+
+/* FORM */
+
+body.dark-mode .form-group label {
+  color: #f3f4f6;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .form-group input::placeholder,
+body.dark-mode .form-group textarea::placeholder {
+  color: #6b7280;
+}
+
+
+/* TRANSACTION SEARCH / SORT */
+
+body.dark-mode #transaction-search,
+body.dark-mode #transaction-sort {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+body.dark-mode #transaction-search::placeholder {
+  color: #6b7280;
+}
+
+
+/* FILTER */
+
+body.dark-mode .filter-btn {
+  background: #111827;
+  color: #d1d5db;
+  border-color: #4b5563;
+}
+
+body.dark-mode .filter-btn:hover {
+  background: #374151;
+}
+
+
+/* TRANSACTION LIST */
+
+body.dark-mode .transaction-row {
+  border-bottom-color: #374151;
+}
+
+body.dark-mode .transaction-category {
+  color: #9ca3af;
+}
+
+body.dark-mode .transaction-name {
+  color: #f9fafb;
+}
+
+body.dark-mode .transaction-date {
+  color: #d1d5db;
+}
+
+body.dark-mode .transaction-note {
+  color: #9ca3af;
+}
+
+
+/* BUDGET */
+
+body.dark-mode .budget-settings,
+body.dark-mode .budget-health {
+  border-top-color: #374151;
+}
+
+body.dark-mode .budget-settings-header span,
+body.dark-mode .budget-health-header span {
+  color: #9ca3af;
+}
+
+body.dark-mode .budget-form-group label {
+  color: #f3f4f6;
+}
+
+body.dark-mode .budget-form-group input,
+body.dark-mode .budget-form-group select {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .budget-row {
+  border-top-color: #374151;
+}
+
+body.dark-mode .budget-limit {
+  color: #e5e7eb;
+}
+
+body.dark-mode .budget-used {
+  color: #9ca3af;
+}
+
+body.dark-mode .budget-progress {
+  background: #374151;
+}
+
+body.dark-mode .health-card {
+  background: #111827;
+  border-color: #374151;
+}
+
+body.dark-mode .health-label {
+  color: #9ca3af;
+}
+
+
+/* EXCHANGE RATE */
+
+body.dark-mode .exchange-settings {
+  border-top-color: #374151;
+}
+
+body.dark-mode .exchange-settings-header span {
+  color: #9ca3af;
+}
+
+body.dark-mode .exchange-form-group label {
+  color: #f3f4f6;
+}
+
+body.dark-mode .exchange-form-group input {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+
+/* CHART EMPTY */
+
+body.dark-mode #chart-empty-msg {
+  color: #9ca3af;
+}
+
+
+/* SORT OPTION */
+
+body.dark-mode select option {
+  background: #111827;
+  color: #f9fafb;
+}
+
+/* =========================================
+   MOBILE HEADER
+========================================= */
+
+@media (max-width: 600px) {
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .theme-toggle {
+    width: 100%;
+  }
+
+}

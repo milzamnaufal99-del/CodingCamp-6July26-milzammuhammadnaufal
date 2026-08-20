@@ -13,6 +13,9 @@ const BUDGET_STORAGE_KEY =
 const RATES_STORAGE_KEY =
   "expense_visualizer_exchange_rates";
 
+const THEME_STORAGE_KEY =
+  "expense_visualizer_theme";
+
 const CATEGORIES = [
   "Food",
   "Transport",
@@ -1313,6 +1316,98 @@ function handleSaveBudget() {
 
 
   amountInput.value = "";
+
+}
+
+// =========================================
+// DARK MODE
+// =========================================
+
+function applyTheme(theme) {
+
+  const toggleButton =
+    $("theme-toggle");
+
+
+  if (theme === "dark") {
+
+    document.body.classList.add(
+      "dark-mode"
+    );
+
+
+    if (toggleButton) {
+
+      toggleButton.textContent =
+        "☀️ Light Mode";
+
+    }
+
+  } else {
+
+    document.body.classList.remove(
+      "dark-mode"
+    );
+
+
+    if (toggleButton) {
+
+      toggleButton.textContent =
+        "🌙 Dark Mode";
+
+    }
+
+  }
+
+}
+
+
+function loadTheme() {
+
+  const savedTheme =
+    localStorage.getItem(
+      THEME_STORAGE_KEY
+    );
+
+
+  if (
+    savedTheme === "dark" ||
+    savedTheme === "light"
+  ) {
+
+    return savedTheme;
+
+  }
+
+
+  return "light";
+
+}
+
+
+function toggleTheme() {
+
+  const isDark =
+    document.body.classList.contains(
+      "dark-mode"
+    );
+
+
+  const newTheme =
+    isDark
+      ? "light"
+      : "dark";
+
+
+  applyTheme(
+    newTheme
+  );
+
+
+  localStorage.setItem(
+    THEME_STORAGE_KEY,
+    newTheme
+  );
 
 }
 
@@ -3155,7 +3250,19 @@ editButton.addEventListener(
         loadBudgets();
 
       EXCHANGE_RATES =
-        loadExchangeRates();
+  loadExchangeRates();
+
+
+// =========================================
+// LOAD THEME
+// =========================================
+
+const savedTheme =
+  loadTheme();
+
+applyTheme(
+  savedTheme
+);
 
       // Initial render
       renderAll();
@@ -3188,6 +3295,22 @@ editButton.addEventListener(
           handleResetData
         );
       }
+
+// =========================================
+// THEME BUTTON
+// =========================================
+
+const themeToggle =
+  $("theme-toggle");
+
+if (themeToggle) {
+
+  themeToggle.addEventListener(
+    "click",
+    toggleTheme
+  );
+
+}
 
 // =========================================
 // EXPORT BUTTON
