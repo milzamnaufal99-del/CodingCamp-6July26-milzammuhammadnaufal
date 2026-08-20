@@ -314,7 +314,7 @@ function parseAmount(value, currency) {
     }
   }
 
-  // =========================================
+// =========================================
 // BUDGET STORAGE
 // =========================================
 
@@ -327,38 +327,16 @@ function loadBudgets() {
         BUDGET_STORAGE_KEY
       );
 
-// =========================================
-// SAVE BUDGETS
-// =========================================
 
-function saveBudgets() {
-
-  try {
-
-    localStorage.setItem(
-      BUDGET_STORAGE_KEY,
-      JSON.stringify(budgets)
-    );
-
-  } catch (error) {
-
-    showBanner(
-      "Unable to save budget settings.",
-      "error"
-    );
-
-  }
-
-}
-
-    // -----------------------------------------
+    // =========================================
     // NORMAL BUDGET STORAGE
-    // -----------------------------------------
+    // =========================================
 
     if (correctKey) {
 
       const parsedData =
         JSON.parse(correctKey);
+
 
       if (
         parsedData &&
@@ -373,9 +351,9 @@ function saveBudgets() {
     }
 
 
-    // -----------------------------------------
+    // =========================================
     // MIGRATE OLD BUGGED STORAGE
-    // -----------------------------------------
+    // =========================================
 
     const oldKey =
       localStorage.getItem(
@@ -408,6 +386,7 @@ function saveBudgets() {
           )
         );
 
+
         return parsedOldData;
 
       }
@@ -417,6 +396,7 @@ function saveBudgets() {
 
     return {};
 
+
   } catch (error) {
 
     showBanner(
@@ -424,7 +404,36 @@ function saveBudgets() {
       "warning"
     );
 
+
     return {};
+
+  }
+
+}
+
+
+// =========================================
+// SAVE BUDGETS
+// =========================================
+
+function saveBudgets() {
+
+  try {
+
+    localStorage.setItem(
+      BUDGET_STORAGE_KEY,
+      JSON.stringify(
+        budgets
+      )
+    );
+
+
+  } catch (error) {
+
+    showBanner(
+      "Unable to save budget settings.",
+      "error"
+    );
 
   }
 
