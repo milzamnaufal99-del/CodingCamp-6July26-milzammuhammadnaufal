@@ -1308,3 +1308,73 @@ body.dark-mode select option {
   }
 
 }
+
+/* =========================================
+   MOBILE TRANSACTION LIST
+========================================= */
+
+@media (max-width: 600px) {
+
+  .transaction-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    padding: 15px 0;
+  }
+
+  .transaction-name {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 0.95rem;
+  }
+
+  .transaction-amount {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  .transaction-category {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8rem;
+  }
+
+  .transaction-type {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+    font-size: 0.8rem;
+  }
+
+  .transaction-date {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .transaction-note {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+
+  .edit-btn {
+    grid-column: 1;
+    grid-row: 5;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .delete-btn {
+    grid-column: 2;
+    grid-row: 5;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+}
