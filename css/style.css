@@ -1539,3 +1539,229 @@ textarea:focus-visible {
 #list-section {
   min-width: 0;
 }
+
+/* =========================================
+   DESKTOP DASHBOARD / EXCHANGE FIX
+========================================= */
+
+@media (min-width: 992px) {
+
+  #summary-section {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Exchange section */
+  .exchange-settings {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #374151;
+    box-sizing: border-box;
+  }
+
+  .exchange-form {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .exchange-form-group {
+    min-width: 0;
+  }
+
+  .exchange-form-group input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  #save-rates {
+    grid-column: 1 / -1;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* Dashboard cards */
+  .summary-container {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .summary-card {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .summary-card p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+}
+
+/* =========================================
+   TRANSACTION HORIZONTAL SCROLL
+========================================= */
+
+#transaction-list {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+
+@media (max-width: 991px) {
+
+  .transaction-row {
+    min-width: 780px;
+
+    display: grid;
+
+    grid-template-columns:
+      130px
+      100px
+      95px
+      80px
+      100px
+      220px
+      75px
+      75px;
+
+    gap: 10px;
+
+    align-items: center;
+  }
+
+}
+
+
+@media (min-width: 992px) {
+
+  #list-section {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .transaction-row {
+    min-width: 780px;
+
+    display: grid;
+
+    grid-template-columns:
+      130px
+      100px
+      95px
+      80px
+      100px
+      220px
+      75px
+      75px;
+
+    gap: 10px;
+
+    align-items: center;
+  }
+
+}
+
+
+.transaction-row > * {
+  min-width: 0;
+}
+
+
+.transaction-name,
+.transaction-amount,
+.transaction-category,
+.transaction-type,
+.transaction-date,
+.transaction-note {
+  min-width: 0;
+}
+
+
+.transaction-name,
+.transaction-category,
+.transaction-type,
+.transaction-date,
+.transaction-note {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.transaction-note {
+  color: #9ca3af;
+}
+
+
+.edit-btn,
+.delete-btn {
+  width: 75px;
+  min-width: 75px;
+  white-space: nowrap;
+}
+
+/* =========================================
+   FINAL TRANSACTION MOBILE OVERRIDE
+========================================= */
+
+@media (max-width: 600px) {
+
+  #transaction-list {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .transaction-row {
+    min-width: 780px !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      130px
+      100px
+      95px
+      80px
+      100px
+      220px
+      75px
+      75px !important;
+
+    gap: 10px !important;
+
+    padding: 15px 0;
+  }
+
+  .transaction-name,
+  .transaction-amount,
+  .transaction-category,
+  .transaction-type,
+  .transaction-date,
+  .transaction-note {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    text-align: left !important;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    width: 75px !important;
+    min-width: 75px !important;
+    margin-top: 0 !important;
+  }
+
+}
