@@ -199,23 +199,47 @@ function parseAmount(value, currency) {
     banner.id = "app-banner";
     banner.textContent = message;
 
-    if (type === "error") {
-      banner.style.cssText =
-        "padding:10px 16px;" +
-        "font-size:14px;" +
-        "text-align:center;" +
-        "background:#fdecea;" +
-        "color:#b91c1c;" +
-        "border-bottom:1px solid #f87171;";
-    } else {
-      banner.style.cssText =
-        "padding:10px 16px;" +
-        "font-size:14px;" +
-        "text-align:center;" +
-        "background:#fef9c3;" +
-        "color:#854d0e;" +
-        "border-bottom:1px solid #fde047;";
-    }
+    banner.setAttribute(
+  "role",
+  type === "error" ? "alert" : "status"
+);
+
+banner.setAttribute(
+  "aria-live",
+  type === "error" ? "assertive" : "polite"
+);
+
+   if (type === "error") {
+
+  banner.style.cssText =
+    "padding:10px 16px;" +
+    "font-size:14px;" +
+    "text-align:center;" +
+    "background:#fdecea;" +
+    "color:#b91c1c;" +
+    "border-bottom:1px solid #f87171;";
+
+} else if (type === "success") {
+
+  banner.style.cssText =
+    "padding:10px 16px;" +
+    "font-size:14px;" +
+    "text-align:center;" +
+    "background:#ecfdf5;" +
+    "color:#047857;" +
+    "border-bottom:1px solid #6ee7b7;";
+
+} else {
+
+  banner.style.cssText =
+    "padding:10px 16px;" +
+    "font-size:14px;" +
+    "text-align:center;" +
+    "background:#fef9c3;" +
+    "color:#854d0e;" +
+    "border-bottom:1px solid #fde047;";
+
+}
 
     document.body.insertBefore(
       banner,
@@ -629,8 +653,28 @@ function handleSaveExchangeRates() {
 
   showBanner(
     "Exchange rates updated successfully.",
-    "warning"
+    "success"
   );
+
+  showBanner(
+  "Transaction saved successfully.",
+  "success"
+);
+
+showBanner(
+  "Transaction updated successfully.",
+  "success"
+);
+
+showBanner(
+  "Budget saved successfully.",
+  "success"
+);
+
+showBanner(
+  "Budget removed successfully.",
+  "success"
+);
 
 }
 
@@ -989,6 +1033,10 @@ editButton.className =
 
 editButton.textContent =
   "Edit";
+  editButton.setAttribute(
+  "aria-label",
+  `Edit ${category} budget`
+);
 
 
 editButton.addEventListener(
@@ -1036,22 +1084,40 @@ editButton.addEventListener(
 
       deleteButton.textContent =
         "Remove";
+        deleteButton.setAttribute(
+  "aria-label",
+  `Remove ${category} budget`
+);
 
 
-      deleteButton.addEventListener(
-        "click",
-        () => {
+     deleteButton.addEventListener(
+  "click",
+  () => {
 
-          delete budgets[category];
-
-          saveBudgets();
-
-          renderBudgets();
-
-          renderBudgetHealth();
-
-        }
+    const confirmed =
+      window.confirm(
+        `Remove ${category} budget?`
       );
+
+    if (!confirmed) {
+      return;
+    }
+
+    delete budgets[category];
+
+    saveBudgets();
+
+    renderBudgets();
+
+    renderBudgetHealth();
+
+    showBanner(
+      `${category} budget removed successfully.`,
+      "success"
+    );
+
+  }
+);
 
 
       // ---------------------------------------
@@ -2923,6 +2989,12 @@ editButton.type =
 
 editButton.textContent =
   "Edit";
+  editButton.setAttribute(
+  "aria-label",
+  `Edit transaction: ${
+    transaction.title || "Untitled"
+  }`
+);
 
 editButton.addEventListener(
   "click",
@@ -2946,6 +3018,12 @@ editButton.addEventListener(
 
       deleteButton.textContent =
         "Delete";
+        deleteButton.setAttribute(
+  "aria-label",
+  `Delete transaction: ${
+    transaction.title || "Untitled"
+  }`
+);
 
 
       deleteButton.addEventListener(

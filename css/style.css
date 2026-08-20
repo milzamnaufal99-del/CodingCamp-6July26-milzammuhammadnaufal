@@ -1378,3 +1378,17 @@ body.dark-mode select option {
   }
 
 }
+
+/* =========================================
+   ACCESSIBILITY / KEYBOARD FOCUS
+========================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+
+  outline: 3px solid #60a5fa;
+  outline-offset: 2px;
+
+}
