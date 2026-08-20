@@ -1392,3 +1392,150 @@ textarea:focus-visible {
   outline-offset: 2px;
 
 }
+
+/* =========================================
+   DESKTOP BUDGET FIX
+========================================= */
+
+@media (min-width: 992px) {
+
+  #summary-section {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .budget-row {
+    grid-template-columns: 90px minmax(0, 1fr) 70px;
+    gap: 8px;
+  }
+
+  .budget-info {
+    min-width: 0;
+  }
+
+  .budget-progress {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .budget-status {
+    grid-column: 1 / 3;
+  }
+
+  .budget-edit,
+  .budget-delete {
+    grid-column: 3;
+    justify-self: stretch;
+  }
+
+  .budget-delete {
+    grid-row: 4;
+  }
+
+  .budget-edit {
+    grid-row: 3;
+  }
+
+}
+
+/* =========================================
+   DESKTOP EXCHANGE RATE FIX
+========================================= */
+
+@media (min-width: 992px) {
+
+  .exchange-settings {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .exchange-form {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .exchange-form-group {
+    min-width: 0;
+  }
+
+  .exchange-form-group input {
+    min-width: 0;
+  }
+
+  #save-rates {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+}
+
+/* =========================================
+   DESKTOP TRANSACTION FIX
+========================================= */
+
+@media (min-width: 992px) {
+
+  #list-section {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  #transaction-list {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .transaction-row {
+    display: grid;
+
+    grid-template-columns:
+      minmax(100px, 1.3fr)
+      minmax(90px, 1fr)
+      minmax(70px, .8fr)
+      minmax(65px, .7fr)
+      minmax(85px, .8fr)
+      auto
+      auto;
+
+    gap: 8px;
+
+    min-width: 0;
+  }
+
+  .transaction-row > * {
+    min-width: 0;
+  }
+
+  .transaction-name,
+  .transaction-category,
+  .transaction-type,
+  .transaction-date,
+  .transaction-note,
+  .transaction-amount {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .transaction-note {
+    white-space: nowrap;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    white-space: nowrap;
+  }
+
+}
+
+/* =========================================
+   GRID OVERFLOW PROTECTION
+========================================= */
+
+.top-grid,
+.bottom-grid,
+#summary-section,
+#input-section,
+#chart-section,
+#list-section {
+  min-width: 0;
+}
