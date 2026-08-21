@@ -1765,3 +1765,89 @@ textarea:focus-visible {
   }
 
 }
+
+/* =========================================
+   EXCHANGE RATE MOBILE SPACING
+========================================= */
+
+@media (max-width: 600px) {
+
+  .exchange-settings {
+    margin-bottom: 32px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #374151;
+  }
+
+  #save-rates {
+    margin-bottom: 0;
+  }
+
+  .summary-container {
+    margin-top: 0;
+  }
+
+}
+
+/* =========================================
+   DESKTOP SUMMARY NUMBER FIX
+========================================= */
+
+@media (min-width: 992px) {
+
+  .summary-card {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .summary-card p {
+    font-size: 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+
+}
+
+/* =========================================
+   DESKTOP SUMMARY GRID
+========================================= */
+
+@media (min-width: 992px) {
+
+  .summary-container {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+  }
+
+  .summary-card {
+    padding: 16px;
+  }
+
+  .summary-card h3 {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+}
+
+/* =========================================
+   WIDE DESKTOP SUMMARY
+========================================= */
+
+@media (min-width: 1200px) {
+
+  .summary-container {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+  }
+
+  .summary-card p {
+    font-size: 1.2rem;
+  }
+
+}
